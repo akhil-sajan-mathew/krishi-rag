@@ -60,7 +60,7 @@
                   ▼
           reciprocal rank fusion → rerank (cross-encoder) → top-5
                   ▼
-          Claude API (chunks as document blocks, citations on)
+          LLM (any provider; numbered chunks, answer cites [n])
                   ▼
           answer + citations ─► cache ─► user
 ```
@@ -73,22 +73,22 @@
 
 | Layer | Choice | Why |
 |---|---|---|
-| Language | Python 3.12 | Best ML ecosystem |
+| Language | Python 3.11+ | Best ML ecosystem |
 | API | FastAPI + Uvicorn | Async, Pydantic validation, auto-generated OpenAPI docs |
 | Vector store | Postgres 16 + **pgvector** | One database for metadata, vectors and full-text search |
 | Keyword search | Postgres `tsvector` + `ts_rank_cd` | BM25-like ranking with no extra service |
-| Embeddings | `BAAI/bge-small-en-v1.5` (384 dimensions) via `sentence-transformers` | Free, runs locally on CPU, strong for its size. Anthropic offers no embeddings endpoint |
+| Embeddings | `BAAI/bge-small-en-v1.5` (384 dimensions) via `sentence-transformers` | Free, runs locally on CPU, strong for its size. Keeps embeddings independent of the LLM provider |
 | Reranker | `BAAI/bge-reranker-base` cross-encoder | Large precision gain for little code. Gives you a clear before/after result |
 | Ingestion | **LlamaIndex** readers + `SentenceSplitter` | Mature chunking with page tracking. Retrieval stays hand-written so every step is visible |
 | PDF parsing | `pymupdf` (fitz) | Fast, keeps page numbers, which citations need |
-| LLM | Claude API, `anthropic` Python SDK, model `claude-opus-5-5` (set by env var `LLM_MODEL`) | Native **citations** on document blocks give page-level citations without prompt tricks |
-| Judge LLM | Same SDK, model set by env var `JUDGE_MODEL` | Faithfulness and correctness grading |
+| LLM | **Any provider**, picked in `.env`: `LLM_PROVIDER=anthropic` (official `anthropic` SDK) or `LLM_PROVIDER=openai_compatible` + `LLM_BASE_URL` (official `openai` SDK; covers OpenAI, Gemini, Groq, OpenRouter, Together, Mistral, DeepSeek, Ollama, LM Studio). Model in `LLM_MODEL` | No lock-in. One small adapter (`app/llm.py`) with a single `complete(system, user) -> text` function |
+| Judge LLM | Same adapter, separate `JUDGE_PROVIDER` / `JUDGE_MODEL` / `JUDGE_BASE_URL` | Faithfulness and correctness grading. A different model from the generator reduces self-grading bias |
 | Cache | Redis 7 | Answer cache (key = hash of question + config). Rate limiting is a stretch goal |
 | Tests | pytest, httpx `TestClient` | Unit tests plus API tests |
 | CI | GitHub Actions | Lint (ruff), tests, and a small 10-question evaluation on PRs |
 | Deploy | AWS Lightsail (or EC2 t3.small) + Docker Compose + Caddy | Simplest real cloud setup. Caddy handles HTTPS automatically |
 
-**LLM cost check:** an answer sends about 5 chunks × 400 tokens ≈ 2–3k input tokens. At Opus 5.5 rates ($4 in / $20 out per million tokens), one full 60-question eval run costs well under $2. If you want it cheaper, set `LLM_MODEL=claude-haiku-5-5` ($0.10 / $0.50). Record which model produced each results table.
+**LLM cost check:** an answer sends about 5 chunks × 400 tokens ≈ 2–3k input tokens, so a full 60-question eval run is roughly 200k input tokens. On most hosted models that's cents to a couple of dollars; a local Ollama model costs nothing but is slow on CPU and follows the citation format less reliably. Every results file records the provider and model that produced it.
 
 ---
 
@@ -154,7 +154,7 @@ krishi-rag/
 ├── docker-compose.prod.yml     # + caddy
 ├── Dockerfile
 ├── pyproject.toml
-├── .env.example                # ANTHROPIC_API_KEY=, DATABASE_URL=, REDIS_URL=, LLM_MODEL=, JUDGE_MODEL=
+├── .env.example                # DATABASE_URL, REDIS_URL, LLM_PROVIDER/MODEL/BASE_URL/API_KEY, JUDGE_* (same)
 ├── data/
 │   ├── sources.csv
 │   └── raw/                    # gitignored PDFs
@@ -165,7 +165,8 @@ krishi-rag/
 │   ├── db.py                   # psycopg pool
 │   ├── ingest.py               # parse → chunk → embed → insert
 │   ├── retrieve.py             # vector, keyword, fusion, rerank
-│   ├── generate.py             # Claude call with citations
+│   ├── llm.py                  # provider adapter: anthropic | openai_compatible
+│   ├── generate.py             # prompt with numbered sources, parse [n] citations
 │   ├── cache.py                # Redis wrapper
 │   └── static/index.html
 ├── eval/
@@ -203,14 +204,17 @@ krishi-rag/
 - `rerank(q, chunks, top_n=5)`: cross-encoder scores, sorted.
 - `retrieve(q, mode)`, where `mode ∈ {vector, keyword, hybrid, hybrid_rerank}`. The eval sweeps all four.
 
-### 7.3 Generation (`app/generate.py`)
-- Pass each retrieved chunk as a separate **document content block** (`type: "text"` source), with `title` set to `"<doc title>, p.<page>"` and `citations: {enabled: true}`, followed by the user's question.
-- The system prompt says: answer only from the documents. If they don't contain the answer, say so plainly. Keep the answer under 150 words, use plain language, and spell out units.
-- Model settings: `model=LLM_MODEL`, set `output_config.effort` explicitly (start with `low`, and compare with `medium` in the eval). Leave `thinking` unset, since it can't be disabled on Opus 5.5. **Do not send `temperature`**, because current API versions reject it.
-- Enable server-side refusal fallback (`betas=["server-side-fallback-2026-07-01"]`, `fallbacks="default"`), and always check `stop_reason` before reading `content`.
-- Map response citations (`cited_text`, `document_index`) back to `{document_id, title, page, url, quote}`.
-- Note: citations can't be combined with structured outputs (`output_config.format`). Use citations and build the JSON response yourself.
-- Before writing this file, read the official `anthropic` Python SDK docs for exact call shapes. Don't write it from memory.
+### 7.3 LLM adapter (`app/llm.py`) and generation (`app/generate.py`)
+- `app/llm.py` exposes one function, `complete(system, user, role="llm") -> str`. `role` picks the `LLM_*` or `JUDGE_*` settings.
+  - `anthropic` backend: official `anthropic` SDK. Don't send `temperature` (current Claude API versions reject it). Check `stop_reason` before reading `content`; treat `refusal` as "no answer".
+  - `openai_compatible` backend: official `openai` SDK with `base_url` and `api_key` from env. Ollama needs no real key (send any string).
+  - Provider-only knobs (Claude `effort`, etc.) stay inside the backend. Nothing else in the code knows which provider is in use.
+  - Before writing each backend, read that SDK's docs for exact call shapes. Don't write it from memory.
+- **Citations are prompt-based, so they work with every provider:**
+  - The user message lists the chunks as `[1] (doc title, p.12) <text>` … `[5] …`, then the question.
+  - The system prompt says: answer only from the numbered sources, put `[n]` after each claim, and if the sources don't contain the answer, reply exactly `NOT_FOUND`. Under 150 words, plain language, units spelled out.
+  - `generate.py` parses `[n]` markers, **drops any number that isn't a real source**, and maps the rest to `{document_id, title, page, url}`. An answer with zero valid citations is flagged `uncited: true`.
+- The eval's citation-accuracy metric measures how well each model follows this format.
 
 ### 7.4 API (`app/main.py`)
 | Endpoint | Request | Response |
@@ -265,7 +269,7 @@ Unit-test `metrics.py` with hand-made cases (`tests/test_metrics.py`).
 | E3 | Hybrid (RRF) | Beats both |
 | E4 | Hybrid + rerank | Best precision |
 | E5 | E4 with size-256 chunks | Smaller chunks: does precision or context win? |
-| E6 | E4, effort `low` vs `medium` | Quality versus cost and latency |
+| E6 | E4 with two or three different LLMs (e.g. one hosted, one local) | Quality, citation accuracy, cost and latency per model |
 
 Run: `python -m eval.run_eval --mode hybrid_rerank --config size512_overlap64`, which writes `eval/results/<timestamp>_<mode>.json` and appends to `eval/results/summary.md`.
 
@@ -282,7 +286,7 @@ Run: `python -m eval.run_eval --mode hybrid_rerank --config size512_overlap64`, 
 - CI (`.github/workflows/ci.yml`):
   1. `ruff check`
   2. `pytest` with a pgvector service container and a Redis service container
-  3. On PRs only, and only if the `ANTHROPIC_API_KEY` secret exists: a 10-question eval smoke run that fails if recall@5 drops below a threshold
+  3. On PRs only, and only if the `LLM_API_KEY` secret exists: a 10-question eval smoke run that fails if recall@5 drops below a threshold
 - Put the CI badge in the README.
 
 ---
@@ -294,7 +298,7 @@ Run: `python -m eval.run_eval --mode hybrid_rerank --config size512_overlap64`, 
 3. `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
 4. Caddy reverse-proxies to the API, with automatic HTTPS on a free subdomain (for example duckdns) or your own domain.
 5. Run ingestion once on the server. Postgres data lives in a named volume.
-6. Protect your API bill: a Redis rate limit (for example 20 questions per IP per hour) and a hard monthly spend limit in the Anthropic Console.
+6. Protect your API bill: a Redis rate limit (for example 20 questions per IP per hour) and a hard monthly spend limit in your LLM provider's dashboard.
 7. Write the steps in `docs/deploy.md`. Keep them simple enough to repeat from scratch.
 
 **Watch out:** the reranker and embedding models need about 1.5 GB of RAM. If 2 GB is tight, add swap, or drop the reranker in production and say so.
