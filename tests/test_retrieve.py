@@ -20,3 +20,10 @@ def test_rrf_scores_match_formula():
 def test_rrf_handles_empty_lists():
     assert fuse([[], _hits(5)]) == [{"id": 5}]
     assert fuse([[], []]) == []
+
+
+def test_weighted_rrf_can_downweight_a_list():
+    # Equal weights: 3 (in both lists) wins. Keyword list weighted 0: pure vector order.
+    vector, keyword = _hits(1, 2, 3), _hits(3, 4)
+    assert [h["id"] for h in fuse([vector, keyword], weights=[1.0, 0.0])][:3] == [1, 2, 3]
+    assert fuse([vector, keyword], weights=[1.0, 1.0])[0]["id"] == 3

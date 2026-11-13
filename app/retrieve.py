@@ -10,7 +10,6 @@ from app.embed import embed_query
 Mode = Literal["vector", "keyword", "hybrid", "hybrid_rerank"]
 MODES: tuple[Mode, ...] = ("vector", "keyword", "hybrid", "hybrid_rerank")
 CANDIDATES = 20  # per retriever, before fusion
-RERANK_POOL = 15  # cross-encoder is ~0.2s per chunk on CPU; Day 4 eval checks this cut
 
 _SELECT = """SELECT c.id, c.document_id, d.title, d.url, c.page_start AS page, c.text
              FROM chunks c JOIN documents d ON d.id = c.document_id"""
@@ -42,13 +41,16 @@ def keyword_search(conn, question: str, k: int, config: str) -> list[dict]:
     return _rows(cur)
 
 
-def fuse(ranked_lists: list[list[dict]], k: int = 60) -> list[dict]:
-    """Reciprocal rank fusion: score = sum of 1 / (k + rank) across lists, rank starting at 1."""
+def fuse(
+    ranked_lists: list[list[dict]], k: int = 60, weights: list[float] | None = None
+) -> list[dict]:
+    """Weighted reciprocal rank fusion: score = sum of weight / (k + rank), rank starting at 1."""
+    weights = weights or [1.0] * len(ranked_lists)
     scores: dict[int, float] = {}
     by_id: dict[int, dict] = {}
-    for results in ranked_lists:
+    for results, weight in zip(ranked_lists, weights, strict=True):
         for rank, hit in enumerate(results, start=1):
-            scores[hit["id"]] = scores.get(hit["id"], 0.0) + 1.0 / (k + rank)
+            scores[hit["id"]] = scores.get(hit["id"], 0.0) + weight / (k + rank)
             by_id[hit["id"]] = hit
     return [by_id[i] for i in sorted(scores, key=scores.get, reverse=True)]
 
@@ -82,8 +84,9 @@ def retrieve(
             [
                 vector_search(conn, question, CANDIDATES, config),
                 keyword_search(conn, question, CANDIDATES, config),
-            ]
+            ],
+            weights=[1.0, settings.keyword_weight],
         )
     if mode == "hybrid":
         return fused[:top_n]
-    return rerank(question, fused[:RERANK_POOL], top_n)
+    return rerank(question, fused[: settings.rerank_pool], top_n)

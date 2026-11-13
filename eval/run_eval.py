@@ -34,8 +34,9 @@ fact; 0 = wrong, or says it cannot answer.
 faithful: 1 if every claim in the answer is supported by the sources shown; 0 otherwise."""
 
 
-def load_golden(limit: int | None) -> list[dict]:
+def load_golden(limit: int | None, types: list[str] | None = None) -> list[dict]:
     rows = [json.loads(line) for line in GOLDEN.read_text(encoding="utf-8").splitlines() if line]
+    rows = [r for r in rows if not types or r["type"] in types]
     return rows[:limit] if limit else rows
 
 
@@ -160,18 +161,23 @@ def main() -> None:
     ap.add_argument("--mode", default="hybrid_rerank", choices=MODES)
     ap.add_argument("--config", default=settings.chunk_config)
     ap.add_argument("--limit", type=int)
-    ap.add_argument("--retrieval-only", action="store_true", help="score all modes, no LLM")
+    ap.add_argument("--types", nargs="+", choices=["factual", "scheme", "multi_hop", "unanswerable"])
+    ap.add_argument("--retrieval-only", action="store_true", help="score retrieval only, no LLM")
+    ap.add_argument("--modes", nargs="+", default=list(MODES), choices=MODES, help="with --retrieval-only")
     args = ap.parse_args()
-    items = load_golden(args.limit)
-    smoke = "smoke_" if args.limit else ""
+    items = load_golden(args.limit, args.types)
+    partial = bool(args.limit or args.types)
+    smoke = "smoke_" if partial else ""
     meta = {
         "config": args.config,
         "rerank_model": settings.rerank_model,
+        "rerank_pool": settings.rerank_pool,
+        "keyword_weight": settings.keyword_weight,
         "embed_model": settings.embed_model,
         "questions": len(items),
     }
-    # Partial (--limit) runs are smoke tests: keep their JSON, but not a summary row.
-    summary_md = RESULTS / ("summary.md" if args.limit is None else "smoke_summary.md")
+    # Partial (--limit/--types) runs are spot checks: keep their JSON, not a summary row.
+    summary_md = RESULTS / ("smoke_summary.md" if partial else "summary.md")
     RESULTS.mkdir(exist_ok=True)
     if not summary_md.exists():
         summary_md.write_text(
@@ -182,9 +188,13 @@ def main() -> None:
             encoding="utf-8",
         )
     when = datetime.now(UTC).strftime("%Y-%m-%d %H:%M")
+    knobs = (
+        f"kw weight {settings.keyword_weight}, pool {settings.rerank_pool}, "
+        f"reranker {settings.rerank_model.split('/')[-1]}"
+    )
 
     if args.retrieval_only:
-        for mode in MODES:
+        for mode in args.modes:
             s = score_retrieval(items, mode, args.config)
             path = write_results(f"{smoke}retrieval_{mode}_{args.config}", s, {**meta, "mode": mode})
             print(
@@ -193,7 +203,7 @@ def main() -> None:
             )
             with summary_md.open("a", encoding="utf-8") as f:
                 f.write(
-                    f"| {when} | retrieval only: {mode}, {args.config} | {_fmt(s['recall@5'])} | "
+                    f"| {when} | retrieval only: {mode}, {args.config}, {knobs} | {_fmt(s['recall@5'])} | "
                     f"{_fmt(s['recall@10'])} | {_fmt(s['mrr@10'])} | | | | | | "
                     f"{s['retrieval_p50_ms']:.0f} ms |\n"
                 )
@@ -209,7 +219,7 @@ def main() -> None:
     print({k: v for k, v in s.items() if k != "rows"}, "->", path.name)
     with summary_md.open("a", encoding="utf-8") as f:
         f.write(
-            f"| {when} | full: {args.mode}, {args.config}, LLM {settings.llm_model}, "
+            f"| {when} | full: {args.mode}, {args.config}, {knobs}, LLM {settings.llm_model}, "
             f"judge {settings.judge_model} | {_fmt(s['recall@5'])} | | | "
             f"{_fmt(s['correct_rate'])} | {_fmt(s['faithfulness'])} | "
             f"{_fmt(s['citation_accuracy'])} | {_fmt(s['refusal_accuracy'])} | "

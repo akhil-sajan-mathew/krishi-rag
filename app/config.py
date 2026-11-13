@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     # Small, fast on CPU (~1s). "BAAI/bge-reranker-base" is stronger but ~6s on this laptop.
     rerank_model: str = "cross-encoder/ms-marco-MiniLM-L6-v2"
     chunk_config: str = "size512_overlap64"  # which stored chunking strategy /ask uses
+    # Weight of keyword hits vs vector hits in fusion (vector = 1). 0.5 chosen by eval (Day 4).
+    keyword_weight: float = 0.5
+    rerank_pool: int = 15  # fused candidates the reranker scores; ~0.07s each on CPU (MiniLM)
 
     # Any provider: "anthropic" or "openai_compatible" (OpenAI, Gemini, Groq, OpenRouter, Ollama...)
     llm_provider: str = "openai_compatible"

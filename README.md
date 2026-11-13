@@ -2,7 +2,7 @@
 
 A question-answering service for Indian farmers, built on official crop and government-scheme documents. It uses retrieval-augmented generation (RAG): it finds the relevant passages first, then writes an answer that cites the source document and page for every claim. It's built with FastAPI, PostgreSQL with pgvector, Redis and any LLM provider (Claude, OpenAI, Gemini, Groq, OpenRouter, Ollama and other OpenAI-compatible APIs), and it comes with a published evaluation.
 
-**Status:** in progress (Day 3: evaluation). See [PLAN.md](PLAN.md) for the full build plan.
+**Status:** in progress (Day 4: experiments). See [PLAN.md](PLAN.md) for the full build plan.
 
 ## Run locally
 
@@ -55,17 +55,28 @@ uv run python -m eval.run_eval --mode hybrid_rerank    # retrieve, answer, and g
 
 First results ([full table](eval/results/summary.md)):
 
-| Retrieval mode | recall@5 | MRR@10 |
-|---|---|---|
-| vector | 0.81 | 0.62 |
-| keyword | 0.53 | 0.39 |
-| hybrid (RRF) | 0.72 | 0.57 |
-| **hybrid + rerank** | **0.85** | **0.72** |
+Retrieval (50 answerable questions; recall@5 = share of evidence pages found in the top 5):
+
+| Setup | recall@5 | MRR@10 | median time |
+|---|---|---|---|
+| vector only | 0.81 | 0.62 | 0.06 s |
+| keyword only | 0.53 | 0.39 | 0.05 s |
+| hybrid, equal weights | 0.72 | 0.57 | 0.08 s |
+| hybrid, keyword weight 0.5 | 0.82 | 0.61 | 0.08 s |
+| **hybrid (weight 0.5) + MiniLM rerank** (default) | **0.88** | **0.73** | 0.95 s |
+| same with bge-reranker-base | 0.90 | 0.76 | 5.6 s |
+| default setup on 256-token chunks | 0.83 | 0.69 | 0.5 s |
+
+What the experiments showed:
+- Keyword search on its own is weak on conversational questions, and with equal weight it drags hybrid below vector alone. At half weight it no longer hurts; with the reranker on it adds little either way.
+- The reranker is the biggest single gain (MRR 0.61 to 0.73). The larger bge reranker adds about one more question for six times the wait.
+- 256-token chunks lose to 512-token chunks even when given the same amount of text.
+- With 50 questions, one question is 0.02 of recall, so differences under about 0.04 are noise.
 
 Full pipeline with `gpt-oss-120b` answering and `gpt-oss-20b` judging (55 of 60 questions; the free tier's daily token cap stopped the last 5): **80% fully correct, 96% faithful to sources, 74% cite the right page, 5 of 5 unanswerable questions correctly declined.**
 
 What it gets wrong today:
-- **Multi-hop questions:** when the sources cover only one half, the model often declines the whole question instead of answering the half it can (5 of 10).
-- **Plain hybrid is worse than vector alone:** keyword hits dilute good vector hits in the fusion; the reranker recovers it. Weighted fusion is the next experiment.
+- **Multi-hop questions:** in 4 of 10, the model declined the whole question even though the sources covered one half (or both). The prompt now tells it to answer the covered part and say what's missing; this is not yet re-measured.
+- **Retrieval for two-topic questions:** one query rarely fetches both topics (m07 got neither page). Splitting the question into two searches is a planned stretch goal.
 
 Source documents are listed in [data/sources.csv](data/sources.csv). The PDFs themselves are downloaded, not committed.

@@ -1,0 +1,772 @@
+{
+  "meta": {
+    "config": "size512_overlap64",
+    "rerank_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+    "rerank_pool": 10,
+    "keyword_weight": 0.5,
+    "embed_model": "BAAI/bge-small-en-v1.5",
+    "questions": 60,
+    "mode": "hybrid_rerank"
+  },
+  "recall@5": 0.88,
+  "recall@10": 0.91,
+  "mrr@10": 0.7275238095238095,
+  "retrieval_p50_ms": 664.5206000002872,
+  "by_type": {
+    "factual": 0.9333333333333333,
+    "multi_hop": 0.7,
+    "scheme": 0.9
+  },
+  "rows": [
+    {
+      "id": "f01",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 18610.326400000304,
+      "top_pages": [
+        "kau_pop_2016:198",
+        "kau_pop_2016:198",
+        "kau_pop_2016:210",
+        "kau_pop_2016:199",
+        "kau_pop_2016:214"
+      ]
+    },
+    {
+      "id": "f02",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 652.2267000000284,
+      "top_pages": [
+        "kau_pop_2016:71",
+        "tnau_organic_horticulture:131",
+        "kau_pop_2016:146",
+        "kau_pop_2016:91",
+        "kau_pop_2016:287"
+      ]
+    },
+    {
+      "id": "f03",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 638.9675999998872,
+      "top_pages": [
+        "kau_pop_2016:170",
+        "tnau_organic_horticulture:88",
+        "tnau_organic_horticulture:112",
+        "kau_pop_2016:166",
+        "tnau_organic_horticulture:108"
+      ]
+    },
+    {
+      "id": "f04",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 689.6377000002758,
+      "top_pages": [
+        "tnau_organic_horticulture:106",
+        "kau_pop_2016:151",
+        "kau_pop_2016:151",
+        "kau_pop_2016:144",
+        "tnau_organic_horticulture:50"
+      ]
+    },
+    {
+      "id": "f05",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 683.4062999996604,
+      "top_pages": [
+        "tnau_organic_horticulture:125",
+        "kau_pop_2016:287",
+        "kau_pop_2016:140",
+        "kau_pop_2016:139",
+        "tnau_organic_horticulture:83"
+      ]
+    },
+    {
+      "id": "f06",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 652.3718999997072,
+      "top_pages": [
+        "tnau_organic_horticulture:167",
+        "kau_pop_2016:340",
+        "tnau_organic_horticulture:12",
+        "kau_pop_2016:201",
+        "kau_pop_2016:192"
+      ]
+    },
+    {
+      "id": "f07",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 712.6251000008779,
+      "top_pages": [
+        "kau_pop_2016:108",
+        "kau_pop_2016:109",
+        "kau_pop_2016:110",
+        "tnau_organic_horticulture:86",
+        "kau_pop_2016:162"
+      ]
+    },
+    {
+      "id": "f08",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.25,
+      "retrieval_ms": 687.585399999989,
+      "top_pages": [
+        "kau_pop_2016:249",
+        "tnau_organic_horticulture:155",
+        "kau_pop_2016:249",
+        "tnau_organic_horticulture:154",
+        "kau_pop_2016:211"
+      ]
+    },
+    {
+      "id": "f09",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 658.5887000001094,
+      "top_pages": [
+        "tnau_organic_horticulture:111",
+        "kau_pop_2016:168",
+        "tnau_organic_horticulture:33",
+        "tnau_organic_horticulture:111",
+        "tnau_organic_horticulture:40"
+      ]
+    },
+    {
+      "id": "f10",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 622.3448999999164,
+      "top_pages": [
+        "tnau_organic_horticulture:65",
+        "tnau_organic_horticulture:66",
+        "kau_pop_2016:219",
+        "kau_pop_2016:93",
+        "kau_pop_2016:146"
+      ]
+    },
+    {
+      "id": "f11",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 661.4231000003201,
+      "top_pages": [
+        "kau_pop_2016:122",
+        "kau_pop_2016:122",
+        "tnau_organic_horticulture:83",
+        "kau_pop_2016:123",
+        "kau_pop_2016:123"
+      ]
+    },
+    {
+      "id": "f12",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 679.3838999992659,
+      "top_pages": [
+        "kau_pop_2016:172",
+        "kau_pop_2016:171",
+        "kau_pop_2016:171",
+        "kau_pop_2016:173",
+        "tnau_organic_horticulture:113"
+      ]
+    },
+    {
+      "id": "f13",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 616.3649000000078,
+      "top_pages": [
+        "kau_pop_2016:17",
+        "kau_pop_2016:14",
+        "kau_pop_2016:20",
+        "kau_pop_2016:19",
+        "kau_pop_2016:19"
+      ]
+    },
+    {
+      "id": "f14",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 667.9457999998704,
+      "top_pages": [
+        "kau_pop_2016:62",
+        "kau_pop_2016:61",
+        "kau_pop_2016:65",
+        "tnau_organic_horticulture:31",
+        "kau_pop_2016:280"
+      ]
+    },
+    {
+      "id": "f15",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 613.8654999995197,
+      "top_pages": [
+        "kau_pop_2016:83",
+        "kau_pop_2016:84",
+        "tnau_organic_horticulture:107",
+        "kau_pop_2016:85",
+        "kau_pop_2016:86"
+      ]
+    },
+    {
+      "id": "f16",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 650.0506000002133,
+      "top_pages": [
+        "kau_pop_2016:22",
+        "kau_pop_2016:33",
+        "kau_pop_2016:25",
+        "kau_pop_2016:21",
+        "kau_pop_2016:45"
+      ]
+    },
+    {
+      "id": "f17",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 686.6509999999835,
+      "top_pages": [
+        "kau_pop_2016:239",
+        "kau_pop_2016:239",
+        "tnau_organic_horticulture:161",
+        "kau_pop_2016:253",
+        "kau_pop_2016:260"
+      ]
+    },
+    {
+      "id": "f18",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 623.4377000000677,
+      "top_pages": [
+        "tnau_organic_horticulture:115",
+        "kau_pop_2016:175",
+        "kau_pop_2016:175",
+        "tnau_organic_horticulture:114",
+        "kau_pop_2016:174"
+      ]
+    },
+    {
+      "id": "f19",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 594.8311000001922,
+      "top_pages": [
+        "kau_pop_2016:251",
+        "tnau_organic_horticulture:156",
+        "kau_pop_2016:250",
+        "tnau_organic_horticulture:156",
+        "tnau_organic_horticulture:154"
+      ]
+    },
+    {
+      "id": "f20",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.2,
+      "retrieval_ms": 644.6492999994007,
+      "top_pages": [
+        "kau_pop_2016:217",
+        "kau_pop_2016:72",
+        "kau_pop_2016:218",
+        "tnau_organic_horticulture:52",
+        "kau_pop_2016:219"
+      ]
+    },
+    {
+      "id": "f21",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.3333333333333333,
+      "retrieval_ms": 669.0774999997302,
+      "top_pages": [
+        "kau_pop_2016:67",
+        "tnau_organic_horticulture:32",
+        "kau_pop_2016:66",
+        "kau_pop_2016:61",
+        "kau_pop_2016:197"
+      ]
+    },
+    {
+      "id": "f22",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 663.1883000000016,
+      "top_pages": [
+        "kau_pop_2016:318",
+        "kau_pop_2016:318",
+        "kau_pop_2016:316",
+        "kau_pop_2016:317",
+        "tnau_organic_horticulture:26"
+      ]
+    },
+    {
+      "id": "f23",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 621.132100000068,
+      "top_pages": [
+        "kau_pop_2016:279",
+        "kau_pop_2016:274",
+        "kau_pop_2016:279",
+        "kau_pop_2016:50",
+        "kau_pop_2016:275"
+      ]
+    },
+    {
+      "id": "f24",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 680.4235999998127,
+      "top_pages": [
+        "kau_pop_2016:207",
+        "tnau_organic_horticulture:43",
+        "kau_pop_2016:68",
+        "kau_pop_2016:66",
+        "tnau_organic_horticulture:34"
+      ]
+    },
+    {
+      "id": "f25",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.25,
+      "retrieval_ms": 637.1912000004158,
+      "top_pages": [
+        "tnau_organic_horticulture:92",
+        "kau_pop_2016:115",
+        "kau_pop_2016:115",
+        "kau_pop_2016:161",
+        "tnau_organic_horticulture:12"
+      ]
+    },
+    {
+      "id": "f26",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 700.1783999994586,
+      "top_pages": [
+        "kau_pop_2016:44",
+        "kau_pop_2016:341",
+        "kau_pop_2016:42",
+        "tnau_organic_horticulture:160",
+        "kau_pop_2016:371"
+      ]
+    },
+    {
+      "id": "f27",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 659.2866999999387,
+      "top_pages": [
+        "kau_pop_2016:97",
+        "kau_pop_2016:395",
+        "kau_pop_2016:90",
+        "kau_pop_2016:29",
+        "kau_pop_2016:393"
+      ]
+    },
+    {
+      "id": "f28",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 672.7562000005491,
+      "top_pages": [
+        "kau_pop_2016:392",
+        "kau_pop_2016:199",
+        "kau_pop_2016:197",
+        "kau_pop_2016:199",
+        "kau_pop_2016:198"
+      ]
+    },
+    {
+      "id": "f29",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 675.0688000001901,
+      "top_pages": [
+        "kau_pop_2016:214",
+        "tnau_organic_horticulture:83",
+        "kau_pop_2016:21",
+        "kau_pop_2016:289",
+        "kau_pop_2016:60"
+      ]
+    },
+    {
+      "id": "f30",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 653.5020000001168,
+      "top_pages": [
+        "tnau_organic_horticulture:23",
+        "tnau_organic_horticulture:8",
+        "kau_pop_2016:219",
+        "kau_pop_2016:93",
+        "kau_pop_2016:63"
+      ]
+    },
+    {
+      "id": "s01",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 698.7148000007437,
+      "top_pages": [
+        "pmkisan_guidelines_2019:2",
+        "pmfby_guidelines:24",
+        "pmkisan_guidelines_2019:1",
+        "pmfby_guidelines:22",
+        "pmfby_guidelines:22"
+      ]
+    },
+    {
+      "id": "s02",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 740.1419999996506,
+      "top_pages": [
+        "pmkisan_guidelines_2019:2",
+        "pmkisan_guidelines_2019:3",
+        "pmkisan_guidelines_2019:7",
+        "pmkisan_guidelines_2019:5",
+        "pmkisan_guidelines_2019:1"
+      ]
+    },
+    {
+      "id": "s03",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.2,
+      "retrieval_ms": 704.6073000001343,
+      "top_pages": [
+        "pmkisan_guidelines_2019:2",
+        "pmkisan_guidelines_2019:7",
+        "pmkisan_guidelines_2019:8",
+        "pmkisan_guidelines_2019:5",
+        "pmkisan_guidelines_2019:3"
+      ]
+    },
+    {
+      "id": "s04",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.3333333333333333,
+      "retrieval_ms": 663.4676999992735,
+      "top_pages": [
+        "pmkisan_guidelines_2019:2",
+        "pmkisan_guidelines_2019:7",
+        "pmkisan_guidelines_2019:3",
+        "pmkisan_guidelines_2019:5",
+        "pmkisan_guidelines_2019:1"
+      ]
+    },
+    {
+      "id": "s05",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 666.1501999997199,
+      "top_pages": [
+        "pmfby_guidelines:54",
+        "pmfby_guidelines:52",
+        "pmfby_guidelines:56",
+        "pmfby_guidelines:57",
+        "pmfby_guidelines:58"
+      ]
+    },
+    {
+      "id": "s06",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 650.2573999996457,
+      "top_pages": [
+        "pmfby_guidelines:78",
+        "pmfby_guidelines:73",
+        "pmfby_guidelines:6",
+        "pmfby_guidelines:43",
+        "pmfby_guidelines:54"
+      ]
+    },
+    {
+      "id": "s07",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.3333333333333333,
+      "retrieval_ms": 674.7999999997774,
+      "top_pages": [
+        "pmfby_guidelines:22",
+        "pmfby_guidelines:57",
+        "pmfby_guidelines:32",
+        "pmfby_sbi_summary:13",
+        "pmfby_guidelines:46"
+      ]
+    },
+    {
+      "id": "s08",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 674.6765000007144,
+      "top_pages": [
+        "pmfby_guidelines:63",
+        "pmfby_guidelines:18",
+        "pmfby_guidelines:74",
+        "pmfby_guidelines:26",
+        "pmfby_guidelines:44"
+      ]
+    },
+    {
+      "id": "s09",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 732.3827000000165,
+      "top_pages": [
+        "pmfby_sbi_summary:9",
+        "pmfby_sbi_summary:3",
+        "pmfby_sbi_summary:4",
+        "pmfby_sbi_summary:9",
+        "pmfby_sbi_summary:5"
+      ]
+    },
+    {
+      "id": "s10",
+      "type": "scheme",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 772.5803000002998,
+      "top_pages": [
+        "pmfby_guidelines:23",
+        "pmfby_guidelines:36",
+        "pmfby_guidelines:35",
+        "pmfby_sbi_summary:8",
+        "pmfby_guidelines:71"
+      ]
+    },
+    {
+      "id": "m01",
+      "type": "multi_hop",
+      "recall@5": 0.5,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 627.8476000006776,
+      "top_pages": [
+        "kau_pop_2016:279",
+        "kau_pop_2016:280",
+        "kau_pop_2016:249",
+        "tnau_organic_horticulture:155",
+        "kau_pop_2016:50"
+      ]
+    },
+    {
+      "id": "m02",
+      "type": "multi_hop",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 694.5095999999467,
+      "top_pages": [
+        "tnau_organic_horticulture:115",
+        "kau_pop_2016:175",
+        "kau_pop_2016:175",
+        "kau_pop_2016:168",
+        "tnau_organic_horticulture:111"
+      ]
+    },
+    {
+      "id": "m03",
+      "type": "multi_hop",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 669.3811000004644,
+      "top_pages": [
+        "kau_pop_2016:172",
+        "kau_pop_2016:171",
+        "kau_pop_2016:150",
+        "kau_pop_2016:144",
+        "kau_pop_2016:151"
+      ]
+    },
+    {
+      "id": "m04",
+      "type": "multi_hop",
+      "recall@5": 0.5,
+      "recall@10": 0.5,
+      "mrr@10": 0.5,
+      "retrieval_ms": 688.4889000002659,
+      "top_pages": [
+        "pmfby_guidelines:54",
+        "pmfby_guidelines:52",
+        "pmfby_guidelines:56",
+        "pmfby_guidelines:57",
+        "pmfby_guidelines:58"
+      ]
+    },
+    {
+      "id": "m05",
+      "type": "multi_hop",
+      "recall@5": 0.5,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "retrieval_ms": 664.5206000002872,
+      "top_pages": [
+        "kau_pop_2016:66",
+        "tnau_organic_horticulture:32",
+        "kau_pop_2016:65",
+        "kau_pop_2016:61",
+        "tnau_organic_horticulture:92"
+      ]
+    },
+    {
+      "id": "m06",
+      "type": "multi_hop",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.3333333333333333,
+      "retrieval_ms": 619.0353000001778,
+      "top_pages": [
+        "kau_pop_2016:205",
+        "kau_pop_2016:206",
+        "kau_pop_2016:22",
+        "kau_pop_2016:207",
+        "kau_pop_2016:9"
+      ]
+    },
+    {
+      "id": "m07",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.5,
+      "mrr@10": 0.14285714285714285,
+      "retrieval_ms": 708.9205000002039,
+      "top_pages": [
+        "pmfby_guidelines:54",
+        "pmfby_guidelines:58",
+        "pmfby_guidelines:19",
+        "pmfby_guidelines:51",
+        "pmfby_guidelines:57"
+      ]
+    },
+    {
+      "id": "m08",
+      "type": "multi_hop",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 644.8820999994496,
+      "top_pages": [
+        "tnau_organic_horticulture:23",
+        "tnau_organic_horticulture:65",
+        "kau_pop_2016:219",
+        "tnau_organic_horticulture:66",
+        "tnau_organic_horticulture:22"
+      ]
+    },
+    {
+      "id": "m09",
+      "type": "multi_hop",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 637.4921000005997,
+      "top_pages": [
+        "kau_pop_2016:17",
+        "kau_pop_2016:27",
+        "kau_pop_2016:22",
+        "kau_pop_2016:19",
+        "kau_pop_2016:14"
+      ]
+    },
+    {
+      "id": "m10",
+      "type": "multi_hop",
+      "recall@5": 0.5,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 640.8315999997285,
+      "top_pages": [
+        "kau_pop_2016:392",
+        "kau_pop_2016:199",
+        "kau_pop_2016:197",
+        "kau_pop_2016:99",
+        "kau_pop_2016:195"
+      ]
+    }
+  ]
+}
