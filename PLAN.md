@@ -78,7 +78,7 @@
 | Vector store | Postgres 16 + **pgvector** | One database for metadata, vectors and full-text search |
 | Keyword search | Postgres `tsvector` + `ts_rank_cd` | BM25-like ranking with no extra service |
 | Embeddings | `BAAI/bge-small-en-v1.5` (384 dimensions) via `sentence-transformers` | Free, runs locally on CPU, strong for its size. Keeps embeddings independent of the LLM provider |
-| Reranker | `BAAI/bge-reranker-base` cross-encoder | Large precision gain for little code. Gives you a clear before/after result |
+| Reranker | `cross-encoder/ms-marco-MiniLM-L6-v2` by default (`RERANK_MODEL`); `BAAI/bge-reranker-base` as the heavier option | Precision gain for little code. MiniLM reranks 15 candidates in ~1s on CPU; bge-reranker-base took ~6s on the dev laptop. The eval compares both |
 | Ingestion | **LlamaIndex** readers + `SentenceSplitter` | Mature chunking with page tracking. Retrieval stays hand-written so every step is visible |
 | PDF parsing | `pymupdf` (fitz) | Fast, keeps page numbers, which citations need |
 | LLM | **Any provider**, picked in `.env`: `LLM_PROVIDER=anthropic` (official `anthropic` SDK) or `LLM_PROVIDER=openai_compatible` + `LLM_BASE_URL` (official `openai` SDK; covers OpenAI, Gemini, Groq, OpenRouter, Together, Mistral, DeepSeek, Ollama, LM Studio). Model in `LLM_MODEL` | No lock-in. One small adapter (`app/llm.py`) with a single `complete(system, user) -> text` function |

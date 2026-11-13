@@ -11,14 +11,14 @@ import csv
 import re
 from collections import Counter
 from dataclasses import dataclass
-from functools import cache
 from pathlib import Path
 
 import pymupdf
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.utils import get_tokenizer
 
-from app.config import CHUNK_CONFIGS, settings
+from app.config import CHUNK_CONFIGS
+from app.embed import embed
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ROOT / "data" / "sources.csv"
@@ -92,17 +92,6 @@ def load_sources(only: str | None) -> list[dict]:
     return [r for r in rows if only is None or r["doc_id"] == only]
 
 
-@cache
-def _model():
-    from sentence_transformers import SentenceTransformer  # slow import; only when needed
-
-    return SentenceTransformer(settings.embed_model)
-
-
-def embed(texts: list[str]):
-    return _model().encode(texts, batch_size=64, normalize_embeddings=True, show_progress_bar=True)
-
-
 def store(conn, row: dict, page_count: int, chunks: list[Chunk], vectors, config: str) -> None:
     with conn.transaction():
         conn.execute(
@@ -165,7 +154,7 @@ def main() -> None:
         )
         total += len(chunks)
         if conn is not None:
-            store(conn, row, len(raw_pages), chunks, embed([c.text for c in chunks]), args.config)
+            store(conn, row, len(raw_pages), chunks, embed([c.text for c in chunks], progress=True), args.config)
 
     print(f"total chunks: {total}" + (" (dry run, nothing stored)" if args.dry_run else ""))
     if conn is not None:
