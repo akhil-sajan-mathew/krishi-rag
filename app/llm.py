@@ -6,6 +6,7 @@ from app.config import settings
 
 PROVIDERS = ("anthropic", "openai_compatible")
 MAX_TOKENS = 1024
+RETRIES = 6  # SDKs back off on 429s; free tiers (e.g. Groq 8k tokens/min) need several waits
 
 
 class LLMError(RuntimeError):
@@ -24,12 +25,16 @@ def _client(provider: str, base_url: str, api_key: str):
 
         # Explicit default URL so a stray ANTHROPIC_BASE_URL env var can't redirect requests.
         return anthropic.Anthropic(
-            api_key=api_key or None, base_url=base_url or "https://api.anthropic.com"
+            api_key=api_key or None,
+            base_url=base_url or "https://api.anthropic.com",
+            max_retries=RETRIES,
         )
     import openai
 
     # Local servers such as Ollama ignore the key, but the SDK requires one.
-    return openai.OpenAI(api_key=api_key or "not-needed", base_url=base_url or None)
+    return openai.OpenAI(
+        api_key=api_key or "not-needed", base_url=base_url or None, max_retries=RETRIES
+    )
 
 
 def complete(system: str, user: str, role: str = "llm") -> str:

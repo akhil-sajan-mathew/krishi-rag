@@ -27,6 +27,7 @@ def parse_citations(text: str, chunks: list[dict]) -> tuple[str, list[dict]]:
     """Keep [n] markers that point at a real source, strip the rest, list cited sources in order."""
     valid = range(1, len(chunks) + 1)
     cited: list[int] = []
+    text = text.translate(str.maketrans("【】", "[]"))  # some models (gpt-oss) cite as 【n】
 
     def keep(m: re.Match) -> str:
         good = [n for n in map(int, re.findall(r"\d+", m.group(0))) if n in valid]
@@ -47,7 +48,10 @@ def _not_found() -> dict:
 
 
 def answer(question: str, mode: Mode = "hybrid_rerank") -> dict:
-    chunks = retrieve(question, mode)
+    return answer_from_chunks(question, retrieve(question, mode))
+
+
+def answer_from_chunks(question: str, chunks: list[dict]) -> dict:
     if not chunks:
         return _not_found()
     raw = complete(SYSTEM, build_prompt(question, chunks))

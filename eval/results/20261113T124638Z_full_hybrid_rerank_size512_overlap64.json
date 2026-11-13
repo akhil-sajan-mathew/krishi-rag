@@ -1,0 +1,844 @@
+{
+  "meta": {
+    "config": "size512_overlap64",
+    "rerank_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+    "embed_model": "BAAI/bge-small-en-v1.5",
+    "questions": 60,
+    "mode": "hybrid_rerank",
+    "llm": "openai_compatible:openai/gpt-oss-120b",
+    "judge": "openai_compatible:openai/gpt-oss-20b"
+  },
+  "correct_rate": 0.8,
+  "correctness_avg": 0.8,
+  "faithfulness": 0.96,
+  "citation_accuracy": 0.74,
+  "false_refusal_rate": 0.14,
+  "refusal_accuracy": 1.0,
+  "recall@5": 0.85,
+  "latency_p50_ms": 17774.41250000038,
+  "latency_p95_ms": 23868.434200000138,
+  "errors": 5,
+  "rows": [
+    {
+      "id": "f01",
+      "type": "factual",
+      "latency_ms": 22023.652899999888,
+      "answer": "For bottle gourd, sow about\u202f3\u202fto\u202f4\u202fkilograms of seed per hectare. [1]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:198"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches the reference answer and is supported by source [1]."
+    },
+    {
+      "id": "f02",
+      "type": "factual",
+      "latency_ms": 1816.5640000001986,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "recall@5": 0.0,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "system declined to answer"
+    },
+    {
+      "id": "f03",
+      "type": "factual",
+      "latency_ms": 1886.805600000116,
+      "answer": "Give irrigation about once every five days when the soil stays dry during a drought. This schedule supplies enough moisture to keep cocoa plants healthy until rain returns[1][3].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:170",
+        "tnau_organic_horticulture:112"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states to irrigate once every five days, matching the reference and supported by sources."
+    },
+    {
+      "id": "f04",
+      "type": "factual",
+      "latency_ms": 10659.75860000026,
+      "answer": "Use a 1\u202fpercent Bordeaux mixture. Spray it on the pepper vines once just before the flowers open (late June to early July) and spray again when the berries begin to form (late August)[2]. This timing gives the best control of anthracnose (fungal pollu) in black pepper.",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:151"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer matches the reference answer\u2019s timing for Bordeaux mixture spray and is supported by source [2]."
+    },
+    {
+      "id": "f05",
+      "type": "factual",
+      "latency_ms": 16804.566199999954,
+      "answer": "Leave about 40\u202fcentimetres of space between each ginger bed[1].",
+      "found": true,
+      "citations": [
+        "tnau_organic_horticulture:125"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the 40\u202fcm spacing, which is directly supported by source\u202f[1]."
+    },
+    {
+      "id": "f06",
+      "type": "factual",
+      "latency_ms": 16027.036599999974,
+      "answer": "Wait at least thirty minutes between spraying the 5\u202fpercent Cashew Nut Shell liquid (CNSL) emulsion and the 40\u202fpercent Wettable Powder formulation of\u202fFusarium\u202fpallidoroseum[1].",
+      "found": true,
+      "citations": [
+        "tnau_organic_horticulture:167"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": false,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer matches the reference\u2019s key fact (at least 30 minutes) and cites source\u00a0[1] that explicitly states a minimum of 30 minutes between the two sprays."
+    },
+    {
+      "id": "f07",
+      "type": "factual",
+      "latency_ms": 17442.13350000018,
+      "answer": "Give each palm\u202f15\u202fto\u202f25\u202fkilograms of organic matter per year, applied during the months of June and July\u202f[1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:108"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states 15\u201125\u202fkg per palm per year during June\u2011July and cites the appropriate source."
+    },
+    {
+      "id": "f08",
+      "type": "factual",
+      "latency_ms": 20988.380600000255,
+      "answer": "The recommended seed rate for lemongrass is\u202f3\u202fto\u202f4\u202fkilograms per hectare[1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:249"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": false,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the seed rate of 3\u20114\u202fkg/ha, matching the reference and supported by source [1]."
+    },
+    {
+      "id": "f09",
+      "type": "factual",
+      "latency_ms": 18242.09090000022,
+      "answer": "Use about\u202f15\u202fto\u202f20\u202fkilograms of compost or farmyard manure to fill each cocoa planting pit.\u202f[2][4]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:168",
+        "tnau_organic_horticulture:111"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer states 15\u201320\u202fkg of compost or FYM, which matches the reference facts and is supported by the cited sources."
+    },
+    {
+      "id": "f10",
+      "type": "factual",
+      "latency_ms": 17279.476700000032,
+      "answer": "For tea the planting pit should be about 45\u202fcentimetres in diameter and 45\u202fto\u202f60\u202fcentimetres deep. Keeping the topsoil separate and refilling the pit with the topsoil first helps root development and yields. (Source\u202f[1]) \n\n(An alternative practice uses a 50\u202fcm\u202f\u00d7\u202f50\u202fcm\u202f\u00d7\u202f50\u202fcm pit, which is also acceptable for tea planting.) (Source\u202f[3])",
+      "found": true,
+      "citations": [
+        "tnau_organic_horticulture:65",
+        "kau_pop_2016:219"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer accurately states the required pit size (45\u202fcm diameter, 45\u201360\u202fcm deep) and cites sources supporting both the primary dimensions and the alternative 50\u202fcm cubic pit, matching the reference facts."
+    },
+    {
+      "id": "f11",
+      "type": "factual",
+      "latency_ms": 17983.61879999993,
+      "answer": "Use a harvesting hook for palms taller than about ten years\u202f[1][2].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:122",
+        "kau_pop_2016:122"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states that harvesting hooks are used for palms older than about ten years, matching the reference and supported by the provided sources."
+    },
+    {
+      "id": "f12",
+      "type": "factual",
+      "latency_ms": 19147.17930000006,
+      "answer": "Remove all affected pods and spray the trees with a 1\u202fpercent Bordeaux mixture. This simple cultural practice reduces the incidence of Lasiodiplodia (charcoal) pod rot.\u202f[1]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:172"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 0,
+      "reason": "Answer matches the reference facts but adds an unsupported claim that the practice reduces incidence."
+    },
+    {
+      "id": "f13",
+      "type": "factual",
+      "latency_ms": 11756.754900000033,
+      "answer": "Both Karuna and Mangala rice varieties are noted as tolerant to iron toxicity.\u202f[1][5]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:19",
+        "kau_pop_2016:19"
+      ],
+      "recall@5": 0.0,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "Answer contradicts reference answer, stating Karuna and Mangala are tolerant, while reference lists only Karishma."
+    },
+    {
+      "id": "f14",
+      "type": "factual",
+      "latency_ms": 18081.053999999767,
+      "answer": "Use a seed rate of about\u202f20\u202fkilograms per hectare for the green\u2011maize cowpea sown between elephant\u2011foot yam pits\u202f[1][2].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:62",
+        "kau_pop_2016:61"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches reference seed rate and cites sources."
+    },
+    {
+      "id": "f15",
+      "type": "factual",
+      "latency_ms": 16771.486399999958,
+      "answer": "Cashew apples that are suitable for processing should contain **more than 70\u202fpercent juice**.\u202f[1]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:83"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the required juice content (>70%) and cites a source that supports this claim."
+    },
+    {
+      "id": "f16",
+      "type": "factual",
+      "latency_ms": 18955.481999999847,
+      "answer": "Keep the sprouted pokkali seeds in baskets woven from plaited coconut leaves and line the inside with koova, banana, karingotta or teak leaves. This storage method maintains seed viability for up to two weeks.\u202f[1]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:22"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer matches the key facts of the reference and is directly supported by the provided source."
+    },
+    {
+      "id": "f17",
+      "type": "factual",
+      "latency_ms": 15903.264700000364,
+      "answer": "Harvest orchid flowers when the long stem shows that about one\u2011quarter to three\u2011quarters of the flowers on the spadix are open, which can be seen by the change in colour of the flowers[1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:239"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer accurately states that orchids should be harvested when 1/4 to 3/4 of the flowers on the spadix are open, indicated by colour change, which is directly supported by source [1]."
+    },
+    {
+      "id": "f18",
+      "type": "factual",
+      "latency_ms": 18911.72800000004,
+      "answer": "Pack cocoa beans only after they are dried to a moisture content of six to eight percent. At this level the beans are considered properly dried and can be stored in polythene bags or polythene\u2011lined gunny bags.\u202f[1][3]",
+      "found": true,
+      "citations": [
+        "tnau_organic_horticulture:115",
+        "kau_pop_2016:175"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer correctly states the required moisture range (6\u20118%) and storage method as supported by the sources."
+    },
+    {
+      "id": "f19",
+      "type": "factual",
+      "latency_ms": 15004.412199999933,
+      "answer": "One round of palmarosa oil distillation takes about two hours. [2]",
+      "found": true,
+      "citations": [
+        "tnau_organic_horticulture:156"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": false,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the distillation time of two hours, supported by the sources."
+    },
+    {
+      "id": "f20",
+      "type": "factual",
+      "latency_ms": 17447.267600000032,
+      "answer": "Three months after planting the Nendran banana, apply\u202f30\u202fgrams nitrogen,\u202f0\u202fgrams phosphorus pentoxide, and\u202f60\u202fgrams potassium oxide per plant.\u202f[3]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:217"
+      ],
+      "recall@5": 0.0,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "The answer states 30:0:60 g per plant, which does not match the reference answer of 50:50:65 g per plant."
+    },
+    {
+      "id": "f21",
+      "type": "factual",
+      "latency_ms": 22904.88759999971,
+      "answer": "After the setts have sprouted, apply the fertilizer in two splits. \n\n* **First split (basal):** Apply the full phosphorus dose together with half of the nitrogen and half of the potassium doses (e.g., N\u202f:\u202fP\u2082O\u2085\u202f:\u202fK\u2082O\u202f=\u202f50\u202f:\u202ffull\u202f:\u202f50\u202fkg\u202fha\u207b\u00b9). This is done within a week of sprouting (or when about 50\u202f% of the setts have sprouted) and is often combined with the basal FYM application (\u2248\u202f10\u201115\u202ftonnes\u202fha\u207b\u00b9 for lesser yam, 15\u202ftonnes\u202fha\u207b\u00b9 for white yam)[1\u2020L12-L16][3\u2020L9-L12]. \n\n* **Second split (top\u2011dressing):** About one month later (\u2248\u202f30\u201145\u202fdays after planting), apply the remaining half of the nitrogen and potassium doses together with weeding or other intercultural operations[3\u2020L12-L13][4\u2020L2-L4]. \n\nThis two\u2011stage schedule supplies all the needed N, P and K after sprouting.",
+      "found": true,
+      "citations": [],
+      "recall@5": 1.0,
+      "citation_hit": false,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer matches the key schedule in the reference and all claims are backed by the provided sources."
+    },
+    {
+      "id": "f22",
+      "type": "factual",
+      "latency_ms": 24990.03700000003,
+      "answer": "Vermiwash is honey\u2011brown in colour with a pH of about\u202f8.5. Its nutrient concentrations are roughly 200\u202fppm nitrogen, 70\u202fppm phosphorus\u2011as\u2011P\u2082O\u2085, and 1\u202f000\u202fppm potassium\u2011as\u2011K\u2082O[1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:318"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the pH and nutrient contents as 8.5, 200\u202fppm N, 70\u202fppm P\u2082O\u2085, and 1000\u202fppm K\u2082O, matching the reference and supported by source\u202f[1]."
+    },
+    {
+      "id": "f23",
+      "type": "factual",
+      "latency_ms": 17847.57639999998,
+      "answer": "For broadcast sowing of fodder maize, use about **eighty kilograms of seed per hectare**[1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:279"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer gives the correct seed rate of 80 kg/ha for broadcast sowing, matching the reference and supported by source [1]."
+    },
+    {
+      "id": "f24",
+      "type": "factual",
+      "latency_ms": 18920.417599999837,
+      "answer": "You need about\u202f1,000\u202fto\u202f2,000\u202fkilograms of seed tubers for each hectare of potato in the Kerala high ranges[1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:207"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches the key fact that 1,000\u20132,000\u202fkg of seed tubers are needed per hectare, which is directly stated in source [1]."
+    },
+    {
+      "id": "f25",
+      "type": "factual",
+      "latency_ms": 17994.390399999702,
+      "answer": "Spray the arecanut bunches with dimethoate at a concentration of 0.05 percent.\u202f[4]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:161"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states that dimethoate at 0.05% should be sprayed on arecanut bunches, matching the reference and supported by source [4]."
+    },
+    {
+      "id": "f26",
+      "type": "factual",
+      "latency_ms": 14297.316300000148,
+      "answer": "Use 10\u202fgrams of Trichoderma\u202fviride per kilogram of rice seed as a seed\u2011treatment for upland rice to control sheath blight[1][2].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:44",
+        "kau_pop_2016:341"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the 10 g/kg seed usage, matching the reference and supported by the provided sources."
+    },
+    {
+      "id": "f27",
+      "type": "factual",
+      "latency_ms": 22305.633199999647,
+      "answer": "Apply 50 kilograms of magnesium sulphate per hectare to the rubber plantation\u202f[1][2].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:395",
+        "kau_pop_2016:97"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states 50\u202fkg\u202fha\u207b\u00b9, which is directly supported by sources [1] and [2]."
+    },
+    {
+      "id": "f28",
+      "type": "factual",
+      "latency_ms": 15420.06130000027,
+      "answer": "Apply a foliar spray of wettable sulfur at a rate of **2\u202fgrams per litre of water**. Spray the bitter\u2011gourd leaves thoroughly, then repeat the application two more times, keeping a **14\u2011day interval** between each spray. This three\u2011application schedule controls powdery mildew on bitter gourd. [1]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:392"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the dosage, frequency, and interval, matching the reference and supported by the cited source."
+    },
+    {
+      "id": "f29",
+      "type": "factual",
+      "latency_ms": 14939.07420000005,
+      "answer": "Collect Chadachi (Uthi) seeds from June through August, and store the seeds for up to four months after collection.\u202f[1]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:301"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches reference facts and is fully supported by source [1]."
+    },
+    {
+      "id": "f30",
+      "type": "factual",
+      "latency_ms": 23868.434200000138,
+      "answer": "Use 10\u202fkilograms to 15\u202fkilograms of powdered cow dung for each planting pit of drumstick. [1]",
+      "found": true,
+      "citations": [
+        "tnau_organic_horticulture:23"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches the reference amount and is supported by source [1]."
+    },
+    {
+      "id": "s01",
+      "type": "scheme",
+      "latency_ms": 12059.487200000149,
+      "answer": "The cut\u2011off date for deciding eligibility for PM\u2011KISAN is\u202f01\u202fFebruary\u202f2019[2].",
+      "found": true,
+      "citations": [
+        "pmkisan_guidelines_2019:3"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer matches the reference date and is supported by source [2]."
+    },
+    {
+      "id": "s02",
+      "type": "scheme",
+      "latency_ms": 13025.640300000305,
+      "answer": "No. Retired government employees whose monthly pension is ten thousand rupees or more are excluded from the PM\u2011KISAN benefit. Since your pension is twelve thousand rupees per month, you are not eligible for the scheme. [2]",
+      "found": true,
+      "citations": [
+        "pmkisan_guidelines_2019:3"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the exclusion criterion and is fully supported by the cited source."
+    },
+    {
+      "id": "s03",
+      "type": "scheme",
+      "latency_ms": 20206.98820000007,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "recall@5": 0.0,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "system declined to answer"
+    },
+    {
+      "id": "s04",
+      "type": "scheme",
+      "latency_ms": 17243.603800000074,
+      "answer": "No. Anyone who paid income tax in the last assessment year is listed among the exclusion categories for the PM\u2011KISAN benefit, so you would not be eligible. [3]",
+      "found": true,
+      "citations": [
+        "pmkisan_guidelines_2019:3"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches the key fact that income tax payers are excluded from PM\u2011KISAN, supported by source [3]."
+    },
+    {
+      "id": "s05",
+      "type": "scheme",
+      "latency_ms": 11265.675499999816,
+      "answer": "The insurer must appoint a loss assessor within\u202f48\u202fhours of receiving the farmer\u2019s loss intimation.\u202f[2]",
+      "found": true,
+      "citations": [
+        "pmfby_guidelines:52"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches the 48\u2011hour requirement in the cited source."
+    },
+    {
+      "id": "s06",
+      "type": "scheme",
+      "latency_ms": 17354.884400000174,
+      "answer": "If a farmer insures the same land more than once under PMFBY, the insurance cover is cancelled, the premium paid is forfeited and the farmer may face administrative or legal action for the malpractice[1]. The scheme also lists \u201cmultiple insurance for same crops grown on same land with multiple insurers or through multiple banks/intermediaries\u201d as a prohibited case[2].",
+      "found": true,
+      "citations": [
+        "pmfby_guidelines:78",
+        "pmfby_guidelines:73"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer matches the reference facts and all claims are supported by the cited sources."
+    },
+    {
+      "id": "s07",
+      "type": "scheme",
+      "latency_ms": 17641.19239999991,
+      "answer": "The bank must give you the insurance acknowledgement receipt (with the folio) within\u202fseven\u202fdays after the insurance company accepts your PMFBY proposal on the portal[1]. The same 7\u2011day deadline is confirmed by the operational guidelines, which state banks must distribute the receipt within 7\u202fdays of the insurer\u2019s acceptance[3].",
+      "found": true,
+      "citations": [
+        "pmfby_guidelines:22",
+        "pmfby_guidelines:32"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states the 7\u2011day receipt rule and cites the relevant sources."
+    },
+    {
+      "id": "s08",
+      "type": "scheme",
+      "latency_ms": 16114.90670000012,
+      "answer": "Banks receive a service charge equal to **four percent of the farmer\u2019s share of the premium**. If the insurance company pays this charge later than 15\u202fdays after the business statistics are finalised, it must add **interest at twelve percent per annum** on the amount due[1].",
+      "found": true,
+      "citations": [
+        "pmfby_guidelines:63"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer accurately reflects the service charge and late interest as per PMFBY guidelines."
+    },
+    {
+      "id": "s09",
+      "type": "scheme",
+      "latency_ms": 12920.125500000267,
+      "answer": "Weather data anomalies that are not reported within\u202fseven\u202fdays are deemed to be accepted by the insurance company and will be used for claim calculation as if no anomaly existed[1][4].",
+      "found": true,
+      "citations": [
+        "pmfby_sbi_summary:9",
+        "pmfby_sbi_summary:9"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer correctly states that anomalies not reported within 7 days are accepted by the insurance company, supported by cited sources."
+    },
+    {
+      "id": "s10",
+      "type": "scheme",
+      "latency_ms": 20089.35650000012,
+      "answer": "A complaint about incorrect CCE data must be lodged online within\u202ftwo\u202fhours of the CCE being conducted\u202fvia the CCE co\u2011observation app.\u202f[1]",
+      "found": true,
+      "citations": [
+        "pmfby_guidelines:23"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Matches the reference answer\u2019s key fact and is supported by the cited source."
+    },
+    {
+      "id": "m01",
+      "type": "multi_hop",
+      "latency_ms": 15251.238600000306,
+      "answer": "Broadcast fodder maize requires about\u202f80\u202fkilograms per hectare, while lemongrass needs only\u202f3\u202fto\u202f4\u202fkilograms per hectare. Therefore, broadcast maize uses far more seed per hectare than lemongrass. [1] [3]",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:279",
+        "kau_pop_2016:249"
+      ],
+      "recall@5": 0.5,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "Answer matches the reference facts and cites appropriate sources."
+    },
+    {
+      "id": "m02",
+      "type": "multi_hop",
+      "latency_ms": 18479.63720000007,
+      "answer": "Use about fifteen to twenty kilograms of compost in each planting pit[5]. \nBefore storage the dried cocoa beans should contain six to eight percent moisture[1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:168",
+        "tnau_organic_horticulture:115"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states 15\u201120\u202fkg of compost per pit and 6\u20118% bean moisture, with citations that support both claims."
+    },
+    {
+      "id": "m03",
+      "type": "multi_hop",
+      "latency_ms": 23448.940299999776,
+      "answer": "The recommended Bordeaux mixture strength is\u202f1\u202fpercent for both diseases\u202f\u2014\u202fspray 1\u202fper\u202fcent Bordeaux mixture for cocoa Lasiodiplodia pod rot and also for black\u2011pepper anthracnose (Colletotrichum pod rot) [1].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:172"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer correctly states 1% Bordeaux mixture for both diseases and is supported by source [1]."
+    },
+    {
+      "id": "m04",
+      "type": "multi_hop",
+      "latency_ms": 17229.17849999976,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "recall@5": 0.5,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "system declined to answer"
+    },
+    {
+      "id": "m05",
+      "type": "multi_hop",
+      "latency_ms": 23971.35389999994,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "recall@5": 0.5,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "system declined to answer"
+    },
+    {
+      "id": "m06",
+      "type": "multi_hop",
+      "latency_ms": 21381.61960000025,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "recall@5": 1.0,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "system declined to answer"
+    },
+    {
+      "id": "m07",
+      "type": "multi_hop",
+      "latency_ms": 21513.255500000014,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "recall@5": 0.0,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "system declined to answer"
+    },
+    {
+      "id": "m08",
+      "type": "multi_hop",
+      "latency_ms": 22671.71559999997,
+      "answer": "- Drumstick: make pits that are\u202f60\u202fcentimetres long\u202f\u00d7\u202f60\u202fcentimetres wide\u202f\u00d7\u202f60\u202fcentimetres deep\u202f[1]. \n- Tea: use pits about\u202f45\u202fcentimetres in diameter and\u202f45\u202fto\u202f60\u202fcentimetres deep\u202f[2] (some guidelines also suggest pits\u202f30\u202fcentimetres\u202f\u00d7\u202f45\u202fcentimetres, deeper (\u224860\u202fcm) in clayey or drought\u2011prone soils)\u202f[5].",
+      "found": true,
+      "citations": [
+        "tnau_organic_horticulture:23",
+        "tnau_organic_horticulture:65",
+        "kau_pop_2016:184"
+      ],
+      "recall@5": 1.0,
+      "citation_hit": true,
+      "correctness": 2,
+      "faithful": 1,
+      "reason": "The answer accurately states the required pit sizes for drumstick (60\u202fcm \u00d7\u202f60\u202fcm \u00d7\u202f60\u202fcm) and tea (45\u202fcm diameter, 45\u201360\u202fcm deep), matching the reference and citing the provided sources for each claim."
+    },
+    {
+      "id": "m09",
+      "type": "multi_hop",
+      "latency_ms": 17125.157099999797,
+      "answer": "The variety that is tolerant to iron toxicity is **Karuna**\u202f[4]. \nFor transplanted rice, the recommended seed rate is **60 to 85 kilograms per hectare**\u202f[2].",
+      "found": true,
+      "citations": [
+        "kau_pop_2016:19",
+        "kau_pop_2016:22"
+      ],
+      "recall@5": 0.5,
+      "citation_hit": true,
+      "correctness": 0,
+      "faithful": 0,
+      "reason": "The answer incorrectly identifies the iron\u2011tolerant variety; the correct variety is Karishma, not Karuna."
+    },
+    {
+      "id": "m10",
+      "type": "multi_hop",
+      "latency_ms": 15198.728100000153,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "recall@5": 0.5,
+      "citation_hit": false,
+      "correctness": 0,
+      "faithful": 1,
+      "reason": "system declined to answer"
+    },
+    {
+      "id": "u01",
+      "type": "unanswerable",
+      "latency_ms": 20913.929299999836,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "refused_correctly": true
+    },
+    {
+      "id": "u02",
+      "type": "unanswerable",
+      "latency_ms": 18134.572400000252,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "refused_correctly": true
+    },
+    {
+      "id": "u03",
+      "type": "unanswerable",
+      "latency_ms": 21073.303000000124,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "refused_correctly": true
+    },
+    {
+      "id": "u04",
+      "type": "unanswerable",
+      "latency_ms": 17844.61220000003,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "refused_correctly": true
+    },
+    {
+      "id": "u05",
+      "type": "unanswerable",
+      "latency_ms": 17774.41250000038,
+      "answer": "The documents I have don't cover this question.",
+      "found": false,
+      "citations": [],
+      "refused_correctly": true
+    },
+    {
+      "id": "u06",
+      "type": "unanswerable",
+      "error": "openai_compatible call failed: Error code: 429 - Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kwyfaen3eh7tqrc0nev4s428` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197431, Requested 3003. Please try again in 3m7.488s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+    },
+    {
+      "id": "u07",
+      "type": "unanswerable",
+      "error": "openai_compatible call failed: Error code: 429 - Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kwyfaen3eh7tqrc0nev4s428` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197429, Requested 3191. Please try again in 4m27.839999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+    },
+    {
+      "id": "u08",
+      "type": "unanswerable",
+      "error": "openai_compatible call failed: Error code: 429 - Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kwyfaen3eh7tqrc0nev4s428` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197426, Requested 3359. Please try again in 5m39.119999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+    },
+    {
+      "id": "u09",
+      "type": "unanswerable",
+      "error": "openai_compatible call failed: Error code: 429 - Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kwyfaen3eh7tqrc0nev4s428` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197423, Requested 2950. Please try again in 2m41.136s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+    },
+    {
+      "id": "u10",
+      "type": "unanswerable",
+      "error": "openai_compatible call failed: Error code: 429 - Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kwyfaen3eh7tqrc0nev4s428` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197421, Requested 2917. Please try again in 2m26.016s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+    }
+  ]
+}

@@ -30,8 +30,11 @@ def vector_search(conn, question: str, k: int, config: str) -> list[dict]:
 
 
 def keyword_search(conn, question: str, k: int, config: str) -> list[dict]:
+    # OR the words: AND-ing every word of a conversational question almost never matches.
+    # ts_rank_cd still ranks chunks that contain more of the words higher.
     cur = conn.execute(
-        f"""{_SELECT}, websearch_to_tsquery('english', %s) q
+        f"""{_SELECT},
+                 to_tsquery('english', replace(plainto_tsquery('english', %s)::text, '&', '|')) q
             WHERE c.config = %s AND c.tsv @@ q
             ORDER BY ts_rank_cd(c.tsv, q) DESC LIMIT %s""",
         (question, config, k),

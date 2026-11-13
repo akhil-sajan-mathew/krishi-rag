@@ -1,0 +1,490 @@
+{
+  "meta": {
+    "config": "size512_overlap64",
+    "rerank_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+    "embed_model": "BAAI/bge-small-en-v1.5",
+    "questions": 60,
+    "mode": "keyword"
+  },
+  "recall@5": 0.12,
+  "recall@10": 0.12,
+  "mrr@10": 0.09666666666666668,
+  "retrieval_p50_ms": 33.05939999972907,
+  "by_type": {
+    "factual": 0.2,
+    "multi_hop": 0.0,
+    "scheme": 0.0
+  },
+  "rows": [
+    {
+      "id": "f01",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 45.60560000027181,
+      "top_pages": []
+    },
+    {
+      "id": "f02",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 28.889000000162923,
+      "top_pages": [
+        "kau_pop_2016:211"
+      ]
+    },
+    {
+      "id": "f03",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 29.493300000012823,
+      "top_pages": []
+    },
+    {
+      "id": "f04",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.76740000033897,
+      "top_pages": []
+    },
+    {
+      "id": "f05",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.18600000023798,
+      "top_pages": []
+    },
+    {
+      "id": "f06",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.426800000284857,
+      "top_pages": []
+    },
+    {
+      "id": "f07",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 28.865499999938038,
+      "top_pages": []
+    },
+    {
+      "id": "f08",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 28.29280000014478,
+      "top_pages": []
+    },
+    {
+      "id": "f09",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 31.055299999934505,
+      "top_pages": [
+        "kau_pop_2016:23"
+      ]
+    },
+    {
+      "id": "f10",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 29.35029999980543,
+      "top_pages": []
+    },
+    {
+      "id": "f11",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 43.66179999988162,
+      "top_pages": []
+    },
+    {
+      "id": "f12",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 46.16170000008424,
+      "top_pages": []
+    },
+    {
+      "id": "f13",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.64699999986988,
+      "top_pages": []
+    },
+    {
+      "id": "f14",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 31.250399999862566,
+      "top_pages": [
+        "kau_pop_2016:62",
+        "kau_pop_2016:62"
+      ]
+    },
+    {
+      "id": "f15",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 46.31900000003952,
+      "top_pages": []
+    },
+    {
+      "id": "f16",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 33.05939999972907,
+      "top_pages": [
+        "kau_pop_2016:22"
+      ]
+    },
+    {
+      "id": "f17",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.3333333333333333,
+      "retrieval_ms": 30.375700000149664,
+      "top_pages": [
+        "tnau_organic_horticulture:161",
+        "kau_pop_2016:241",
+        "kau_pop_2016:239",
+        "kau_pop_2016:239",
+        "tnau_organic_horticulture:163"
+      ]
+    },
+    {
+      "id": "f18",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 0.5,
+      "retrieval_ms": 31.120800000280724,
+      "top_pages": [
+        "tnau_organic_horticulture:115",
+        "kau_pop_2016:175"
+      ]
+    },
+    {
+      "id": "f19",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 42.280699999992066,
+      "top_pages": []
+    },
+    {
+      "id": "f20",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.3413999998229,
+      "top_pages": []
+    },
+    {
+      "id": "f21",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.361100000234728,
+      "top_pages": []
+    },
+    {
+      "id": "f22",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 50.025100000311795,
+      "top_pages": []
+    },
+    {
+      "id": "f23",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 46.01559999991878,
+      "top_pages": []
+    },
+    {
+      "id": "f24",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 26.779000000260567,
+      "top_pages": []
+    },
+    {
+      "id": "f25",
+      "type": "factual",
+      "recall@5": 1.0,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "retrieval_ms": 36.010300000270945,
+      "top_pages": [
+        "kau_pop_2016:161"
+      ]
+    },
+    {
+      "id": "f26",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.471000000314234,
+      "top_pages": []
+    },
+    {
+      "id": "f27",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 30.079599999680795,
+      "top_pages": []
+    },
+    {
+      "id": "f28",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 49.29089999995995,
+      "top_pages": []
+    },
+    {
+      "id": "f29",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.058000000106404,
+      "top_pages": []
+    },
+    {
+      "id": "f30",
+      "type": "factual",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 46.31789999984903,
+      "top_pages": []
+    },
+    {
+      "id": "s01",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.516800000285002,
+      "top_pages": []
+    },
+    {
+      "id": "s02",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 35.803199999918434,
+      "top_pages": []
+    },
+    {
+      "id": "s03",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 26.27570000004198,
+      "top_pages": []
+    },
+    {
+      "id": "s04",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.025100000173552,
+      "top_pages": []
+    },
+    {
+      "id": "s05",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 40.534000000207016,
+      "top_pages": []
+    },
+    {
+      "id": "s06",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 26.628200000232027,
+      "top_pages": []
+    },
+    {
+      "id": "s07",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 26.473899999928108,
+      "top_pages": []
+    },
+    {
+      "id": "s08",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 40.95430000006672,
+      "top_pages": []
+    },
+    {
+      "id": "s09",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.49070000025313,
+      "top_pages": []
+    },
+    {
+      "id": "s10",
+      "type": "scheme",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 26.618299999881856,
+      "top_pages": []
+    },
+    {
+      "id": "m01",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 35.4589999997188,
+      "top_pages": []
+    },
+    {
+      "id": "m02",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.127199999977165,
+      "top_pages": []
+    },
+    {
+      "id": "m03",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 26.41089999997348,
+      "top_pages": []
+    },
+    {
+      "id": "m04",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 36.16660000034244,
+      "top_pages": []
+    },
+    {
+      "id": "m05",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 47.15829999986454,
+      "top_pages": []
+    },
+    {
+      "id": "m06",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.418499999839696,
+      "top_pages": []
+    },
+    {
+      "id": "m07",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.063900000030117,
+      "top_pages": []
+    },
+    {
+      "id": "m08",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.202700000088953,
+      "top_pages": []
+    },
+    {
+      "id": "m09",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 41.82279999986349,
+      "top_pages": []
+    },
+    {
+      "id": "m10",
+      "type": "multi_hop",
+      "recall@5": 0.0,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "retrieval_ms": 27.534600000308274,
+      "top_pages": []
+    }
+  ]
+}

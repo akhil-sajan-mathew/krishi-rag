@@ -20,6 +20,11 @@ def test_invalid_citation_numbers_are_dropped():
     assert [c["n"] for c in cites] == [1]
 
 
+def test_fullwidth_brackets_are_accepted():
+    text, cites = generate.parse_citations("Sow in May【2】.", CHUNKS)
+    assert text == "Sow in May[2]." and [c["n"] for c in cites] == [2]
+
+
 def test_prompt_numbers_sources_with_title_and_page():
     prompt = generate.build_prompt("Seed rate?", CHUNKS)
     assert "[1] (KAU PoP, p.198)\na" in prompt and "[2] (PMFBY, p.12)\nb" in prompt
