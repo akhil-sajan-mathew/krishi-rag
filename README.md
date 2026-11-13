@@ -1,8 +1,10 @@
 # Krishi RAG
 
+[![CI](https://github.com/akhil-sajan-mathew/krishi-rag/actions/workflows/ci.yml/badge.svg)](https://github.com/akhil-sajan-mathew/krishi-rag/actions/workflows/ci.yml)
+
 A question-answering service for Indian farmers, built on official crop and government-scheme documents. It uses retrieval-augmented generation (RAG): it finds the relevant passages first, then writes an answer that cites the source document and page for every claim. It's built with FastAPI, PostgreSQL with pgvector, Redis and any LLM provider (Claude, OpenAI, Gemini, Groq, OpenRouter, Ollama and other OpenAI-compatible APIs), and it comes with a published evaluation.
 
-**Status:** in progress (Day 4: experiments). See [PLAN.md](PLAN.md) for the full build plan.
+**Status:** in progress (Day 5: caching, rate limiting, CI). See [PLAN.md](PLAN.md) for the full build plan.
 
 ## Run locally
 
@@ -39,6 +41,12 @@ Any provider works. Set these in `.env`:
 | Ollama (local, free) | `openai_compatible` | `http://localhost:11434/v1` |
 
 Also set `LLM_MODEL` (the provider's model name) and `LLM_API_KEY` (any text for Ollama).
+
+## Caching and rate limits
+
+- Answers are cached in Redis for 7 days. The cache key covers the question (case and spacing ignored) and every setting that changes answers: mode, chunk size, fusion weight, reranker, LLM, and the prompt itself. A repeat question returns in about 2 ms instead of several seconds; the response says `"cached": true`.
+- Each IP address may ask `RATE_LIMIT_PER_HOUR` questions per hour (default 20; 0 turns it off). Further requests get HTTP 429.
+- Both fail open: if Redis is down, `/ask` still answers (uncached, unlimited) and `/health` reports `"redis": "down"`.
 
 ## Retrieval modes
 

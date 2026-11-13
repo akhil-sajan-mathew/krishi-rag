@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     database_url: str = "postgresql://krishi:krishi@localhost:5433/krishi"
+    redis_url: str = "redis://localhost:6379/0"
+    rate_limit_per_hour: int = 20  # /ask requests per IP per hour; 0 turns it off
     embed_model: str = "BAAI/bge-small-en-v1.5"
     # Small, fast on CPU (~1s). "BAAI/bge-reranker-base" is stronger but ~6s on this laptop.
     rerank_model: str = "cross-encoder/ms-marco-MiniLM-L6-v2"
