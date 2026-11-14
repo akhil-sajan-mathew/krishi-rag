@@ -104,6 +104,13 @@
       button.textContent = "Ask";
     }
   });
+
+  // Shareable links: /?q=your+question fills the box and asks it.
+  const shared = new URLSearchParams(location.search).get("q");
+  if (shared) {
+    $("question").value = shared.slice(0, 500);
+    form.requestSubmit();
+  }
 </script>
 </body>
 </html>
