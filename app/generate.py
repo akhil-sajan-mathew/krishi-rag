@@ -33,11 +33,12 @@ def parse_citations(text: str, chunks: list[dict]) -> tuple[str, list[dict]]:
     text = text.translate(str.maketrans("【】", "[]"))  # some models (gpt-oss) cite as 【n】
 
     def keep(m: re.Match) -> str:
-        good = [n for n in map(int, re.findall(r"\d+", m.group(0))) if n in valid]
+        good = [n for n in map(int, re.findall(r"\d+", m.group(1))) if n in valid]
         cited.extend(n for n in good if n not in cited)
         return f"[{', '.join(map(str, good))}]" if good else ""
 
-    cleaned = re.sub(r"\[\d+(?:\s*,\s*\d+)*\]", keep, text)
+    # gpt-oss may append its own locator: [2†21.4.6.1]. Keep the number, drop the locator.
+    cleaned = re.sub(r"\[(\d+(?:\s*,\s*\d+)*)(?:†[^\]]*)?\]", keep, text)
     cleaned = re.sub(r"[ \t]+([.,;:])", r"\1", re.sub(r"[ \t]{2,}", " ", cleaned)).strip()
     citations = [
         {k: chunks[n - 1][k] for k in ("document_id", "title", "page", "url")} | {"n": n}

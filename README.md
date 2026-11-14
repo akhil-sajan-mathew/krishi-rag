@@ -81,10 +81,27 @@ What the experiments showed:
 - 256-token chunks lose to 512-token chunks even when given the same amount of text.
 - With 50 questions, one question is 0.02 of recall, so differences under about 0.04 are noise.
 
-Full pipeline with `gpt-oss-120b` answering and `gpt-oss-20b` judging (55 of 60 questions; the free tier's daily token cap stopped the last 5): **80% fully correct, 96% faithful to sources, 74% cite the right page, 5 of 5 unanswerable questions correctly declined.**
+Full pipeline, all 60 questions, `gpt-oss-120b` answering and `gpt-oss-20b` judging (14 Nov, default settings):
+
+| | Day 3 (55 questions) | Now (60 questions) |
+|---|---|---|
+| Fully correct | 80% | 76% |
+| Average score (half credit for partly right) | 80% | **81%** |
+| Faithful to sources | 96% | 92% |
+| Cites the right page | 74% | **84%** |
+| Answerable questions wrongly declined | 14% | **8%** |
+| Off-topic questions correctly declined | 5 of 5 | 9 of 10 |
+
+By type, average score: factual 87%, scheme 90%, multi-hop 55% (was 40%).
+
+What changed and what it means:
+- The prompt now answers the covered part of a two-part question instead of declining it. Multi-hop declines went from 5 of 10 to 0, so more answers get partial credit; fewer are fully correct, and the judge marks some "this part isn't covered" claims as unfaithful when the missing half was in the documents but not retrieved. Overall the trade is about even, and the answers are more useful.
+- Citation accuracy rose mainly from parsing two gpt-oss citation styles (`【2】`, `[2†...]`).
+- The one off-topic miss (nano urea) said plainly that nano urea isn't covered, then gave plain-urea spray rates. It counts as a failure because it didn't decline outright.
 
 What it gets wrong today:
-- **Multi-hop questions:** in 4 of 10, the model declined the whole question even though the sources covered one half (or both). The prompt now tells it to answer the covered part and say what's missing; this is not yet re-measured.
+- **Retrieval misses:** in 4 of the 5 wrong factual/scheme answers, the right page wasn't in the top 5, so the model correctly declined. Better retrieval would fix these, not a better prompt.
+- **Reading errors:** in a few answers the right page was retrieved and the model still missed or misread the fact (m06, m08, f13).
 - **Retrieval for two-topic questions:** one query rarely fetches both topics (m07 got neither page). Splitting the question into two searches is a planned stretch goal.
 
 Source documents are listed in [data/sources.csv](data/sources.csv). The PDFs themselves are downloaded, not committed.
