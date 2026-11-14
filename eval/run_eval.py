@@ -15,7 +15,7 @@ import time
 from datetime import UTC, datetime
 from pathlib import Path
 
-from app.config import settings
+from app.config import embed_model_for, settings
 from app.generate import answer_from_chunks
 from app.llm import LLMError, complete
 from app.retrieve import MODES, retrieve
@@ -34,8 +34,10 @@ fact; 0 = wrong, or says it cannot answer.
 faithful: 1 if every claim in the answer is supported by the sources shown; 0 otherwise."""
 
 
-def load_golden(limit: int | None, types: list[str] | None = None) -> list[dict]:
-    rows = [json.loads(line) for line in GOLDEN.read_text(encoding="utf-8").splitlines() if line]
+def load_golden(
+    limit: int | None, types: list[str] | None = None, path: Path = GOLDEN
+) -> list[dict]:
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
     rows = [r for r in rows if not types or r["type"] in types]
     return rows[:limit] if limit else rows
 
@@ -161,20 +163,24 @@ def main() -> None:
     ap.add_argument("--mode", default="hybrid_rerank", choices=MODES)
     ap.add_argument("--config", default=settings.chunk_config)
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--golden", type=Path, default=GOLDEN, help="test set file (e.g. eval/golden_hi.jsonl)")
     ap.add_argument("--types", nargs="+", choices=["factual", "scheme", "multi_hop", "unanswerable"])
     ap.add_argument("--retrieval-only", action="store_true", help="score retrieval only, no LLM")
     ap.add_argument("--modes", nargs="+", default=list(MODES), choices=MODES, help="with --retrieval-only")
     args = ap.parse_args()
-    items = load_golden(args.limit, args.types)
+    items = load_golden(args.limit, args.types, args.golden)
     partial = bool(args.limit or args.types)
     smoke = "smoke_" if partial else ""
+    test_set = "" if args.golden == GOLDEN else f"{args.golden.stem}, "  # for summary rows
+    prefix = smoke + ("" if args.golden == GOLDEN else f"{args.golden.stem}_")  # for file names
     meta = {
         "config": args.config,
         "rerank_model": settings.rerank_model,
         "rerank_pool": settings.rerank_pool,
         "keyword_weight": settings.keyword_weight,
-        "embed_model": settings.embed_model,
+        "embed_model": embed_model_for(args.config),
         "questions": len(items),
+        "golden": args.golden.name,
     }
     # Partial (--limit/--types) runs are spot checks: keep their JSON, not a summary row.
     summary_md = RESULTS / ("smoke_summary.md" if partial else "summary.md")
@@ -196,14 +202,14 @@ def main() -> None:
     if args.retrieval_only:
         for mode in args.modes:
             s = score_retrieval(items, mode, args.config)
-            path = write_results(f"{smoke}retrieval_{mode}_{args.config}", s, {**meta, "mode": mode})
+            path = write_results(f"{prefix}retrieval_{mode}_{args.config}", s, {**meta, "mode": mode})
             print(
                 f"{mode:14s} recall@5 {_fmt(s['recall@5'])}  recall@10 {_fmt(s['recall@10'])}  "
                 f"MRR@10 {_fmt(s['mrr@10'])}  by type {s['by_type']}  -> {path.name}"
             )
             with summary_md.open("a", encoding="utf-8") as f:
                 f.write(
-                    f"| {when} | retrieval only: {mode}, {args.config}, {knobs} | {_fmt(s['recall@5'])} | "
+                    f"| {when} | retrieval only: {test_set}{mode}, {args.config}, {knobs} | {_fmt(s['recall@5'])} | "
                     f"{_fmt(s['recall@10'])} | {_fmt(s['mrr@10'])} | | | | | | "
                     f"{s['retrieval_p50_ms']:.0f} ms |\n"
                 )
@@ -215,11 +221,11 @@ def main() -> None:
         judge=f"{settings.judge_provider}:{settings.judge_model}",
     )
     s = score_full(items, args.mode, args.config)
-    path = write_results(f"{smoke}full_{args.mode}_{args.config}", s, meta)
+    path = write_results(f"{prefix}full_{args.mode}_{args.config}", s, meta)
     print({k: v for k, v in s.items() if k != "rows"}, "->", path.name)
     with summary_md.open("a", encoding="utf-8") as f:
         f.write(
-            f"| {when} | full: {args.mode}, {args.config}, {knobs}, LLM {settings.llm_model}, "
+            f"| {when} | full: {test_set}{args.mode}, {args.config}, {knobs}, LLM {settings.llm_model}, "
             f"judge {settings.judge_model} | {_fmt(s['recall@5'])} | | | "
             f"{_fmt(s['correct_rate'])} | {_fmt(s['faithfulness'])} | "
             f"{_fmt(s['citation_accuracy'])} | {_fmt(s['refusal_accuracy'])} | "

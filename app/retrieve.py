@@ -3,9 +3,10 @@
 from functools import cache
 from typing import Literal
 
-from app.config import settings
+from app.config import embed_model_for, settings
 from app.db import connect
 from app.embed import embed_query
+from app.translate import search_query
 
 Mode = Literal["vector", "keyword", "hybrid", "hybrid_rerank"]
 MODES: tuple[Mode, ...] = ("vector", "keyword", "hybrid", "hybrid_rerank")
@@ -23,7 +24,7 @@ def _rows(cur) -> list[dict]:
 def vector_search(conn, question: str, k: int, config: str) -> list[dict]:
     cur = conn.execute(
         f"{_SELECT} WHERE c.config = %s ORDER BY c.embedding <=> %s LIMIT %s",
-        (config, embed_query(question), k),
+        (config, embed_query(question, embed_model_for(config)), k),
     )
     return _rows(cur)
 
@@ -74,6 +75,7 @@ def retrieve(
     question: str, mode: Mode = "hybrid_rerank", top_n: int = 5, config: str | None = None
 ) -> list[dict]:
     config = config or settings.chunk_config
+    question = search_query(question)  # non-English questions are searched in English
     # shortcut: one connection per call; add a pool (psycopg_pool) when traffic needs it.
     with connect() as conn:
         if mode == "vector":

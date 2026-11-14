@@ -1,23 +1,30 @@
 from functools import cache
 
-from app.config import settings
-
-# bge models expect this prefix on queries (not on passages).
-QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
+# (query prefix, passage prefix) each model was trained with. Wrong prefixes quietly hurt recall.
+PREFIXES = {
+    "BAAI/bge-small-en-v1.5": ("Represent this sentence for searching relevant passages: ", ""),
+    "intfloat/multilingual-e5-small": ("query: ", "passage: "),
+    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2": ("", ""),
+}
 
 
 @cache
-def _model():
+def _model(name: str):
     from sentence_transformers import SentenceTransformer  # slow import; only when needed
 
-    return SentenceTransformer(settings.embed_model)
+    return SentenceTransformer(name)
 
 
-def embed(texts: list[str], progress: bool = False):
-    return _model().encode(
+def _encode(texts: list[str], model: str, progress: bool = False):
+    return _model(model).encode(
         texts, batch_size=64, normalize_embeddings=True, show_progress_bar=progress
     )
 
 
-def embed_query(question: str):
-    return embed([QUERY_PREFIX + question])[0]
+def embed_passages(texts: list[str], model: str, progress: bool = False):
+    prefix = PREFIXES[model][1]
+    return _encode([prefix + t for t in texts], model, progress)
+
+
+def embed_query(question: str, model: str):
+    return _encode([PREFIXES[model][0] + question], model)[0]

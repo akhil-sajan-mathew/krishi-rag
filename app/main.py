@@ -7,6 +7,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from app import cache, generate
+from app.config import embed_model_for, settings
 from app.db import connect
 from app.embed import embed_query
 from app.llm import LLMError
@@ -16,7 +17,7 @@ from app.retrieve import Mode, _reranker
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # Load both models at startup so the first user doesn't wait ~30s.
-    embed_query("warm up")
+    embed_query("warm up", embed_model_for(settings.chunk_config))
     _reranker()
     yield
 

@@ -4,9 +4,12 @@ import re
 
 from app.llm import complete
 from app.retrieve import Mode, retrieve
+from app.translate import is_mostly_english
 
 NOT_FOUND = "NOT_FOUND"
 NOT_FOUND_ANSWER = "The documents I have don't cover this question."
+# shortcut: Hindi is the only non-English reply; other languages get the English message.
+NOT_FOUND_ANSWER_HI = "मेरे पास मौजूद दस्तावेज़ों में इस प्रश्न का उत्तर नहीं है।"
 
 SYSTEM = f"""You answer farmers' questions using ONLY the numbered sources provided.
 Rules:
@@ -16,6 +19,7 @@ Rules:
 - Only if the sources contain nothing that answers any part of the question, reply with exactly
   {NOT_FOUND} and nothing else.
 - Under 150 words. Plain, simple language. Write units in full (kilograms per hectare, not kg ha-1).
+- Answer in the same language as the question (the sources are in English; translate what you use).
 - Do not use outside knowledge."""
 
 
@@ -47,8 +51,9 @@ def parse_citations(text: str, chunks: list[dict]) -> tuple[str, list[dict]]:
     return cleaned, citations
 
 
-def _not_found() -> dict:
-    return {"answer": NOT_FOUND_ANSWER, "found": False, "citations": [], "uncited": False}
+def _not_found(question: str) -> dict:
+    message = NOT_FOUND_ANSWER if is_mostly_english(question) else NOT_FOUND_ANSWER_HI
+    return {"answer": message, "found": False, "citations": [], "uncited": False}
 
 
 def answer(question: str, mode: Mode = "hybrid_rerank") -> dict:
@@ -57,9 +62,9 @@ def answer(question: str, mode: Mode = "hybrid_rerank") -> dict:
 
 def answer_from_chunks(question: str, chunks: list[dict]) -> dict:
     if not chunks:
-        return _not_found()
+        return _not_found(question)
     raw = complete(SYSTEM, build_prompt(question, chunks))
     if raw.strip().strip(".").upper() == NOT_FOUND:
-        return _not_found()
+        return _not_found(question)
     text, citations = parse_citations(raw, chunks)
     return {"answer": text, "found": True, "citations": citations, "uncited": not citations}

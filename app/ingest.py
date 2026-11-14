@@ -18,19 +18,13 @@ from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.utils import get_tokenizer
 
 from app.config import CHUNK_CONFIGS
-from app.embed import embed
+from app.embed import embed_passages
+from app.translate import is_mostly_english
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ROOT / "data" / "sources.csv"
 RAW = ROOT / "data" / "raw"
 MIN_CHARS_PER_PAGE = 200  # below this on average, the PDF is probably a scan with no text layer
-# shortcut: v1 is English-only (the embedding model is English), so mostly non-Latin chunks are
-# skipped. Upgrade with the multilingual model in PLAN.md section 13.
-MIN_ASCII_SHARE = 0.8
-
-
-def is_mostly_english(text: str) -> bool:
-    return sum(c.isascii() for c in text) / len(text) >= MIN_ASCII_SHARE
 
 
 @dataclass
@@ -81,6 +75,8 @@ def chunk_pages(pages: list[str], size: int, overlap: int) -> list[Chunk]:
             continue
         for piece in splitter.split_text(text):
             piece = piece.strip()
+            # shortcut: mostly non-Latin chunks are skipped. The only Hindi source (PM-KISAN)
+            # extracts as garbled characters. Lift this when a clean Hindi PDF is added.
             if piece and is_mostly_english(piece):
                 chunks.append(Chunk(page_no, len(chunks), piece, len(tokenizer(piece))))
     return chunks
@@ -124,7 +120,7 @@ def main() -> None:
     ap.add_argument("--only", help="ingest a single doc_id")
     ap.add_argument("--dry-run", action="store_true", help="parse and chunk only; no embedding, no DB")
     args = ap.parse_args()
-    size, overlap = CHUNK_CONFIGS[args.config]
+    size, overlap, model = CHUNK_CONFIGS[args.config]
 
     conn = None
     if not args.dry_run:
@@ -154,7 +150,7 @@ def main() -> None:
         )
         total += len(chunks)
         if conn is not None:
-            store(conn, row, len(raw_pages), chunks, embed([c.text for c in chunks], progress=True), args.config)
+            store(conn, row, len(raw_pages), chunks, embed_passages([c.text for c in chunks], model, progress=True), args.config)
 
     print(f"total chunks: {total}" + (" (dry run, nothing stored)" if args.dry_run else ""))
     if conn is not None:

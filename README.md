@@ -9,6 +9,7 @@ Ask a farming question in plain language and get a short answer drawn only from 
 **At a glance**
 - Retrieval-augmented generation (RAG) over 6 public documents (about 720 pages, 1,266 chunks): Postgres with pgvector, hybrid vector + keyword search, and a cross-encoder reranker.
 - Works with any LLM: Claude, OpenAI, Gemini, Groq, OpenRouter, Ollama, or anything OpenAI-compatible.
+- Answers questions asked in Hindi, in Hindi, from the same English documents.
 - Measured on a hand-checked 60-question test set: **the right page is in the top 5 for 88% of questions; 81% average answer score; 92% of answers faithful to their sources; 9 of 10 off-topic questions correctly declined.**
 - Production-ready setup: Docker, automatic HTTPS with Caddy, Redis caching and per-IP rate limits, CI on every push.
 
@@ -67,6 +68,21 @@ All numbers come from [`eval/run_eval.py`](eval/run_eval.py) on [`eval/golden.js
 - **Answering part of a question beats declining it.** The first prompt declined 5 of 10 two-part questions outright when the sources covered only one half. After the change, none were declined and their average score rose from 40% to 55%; the trade-off is that a few partial answers wrongly say the other half isn't in the documents.
 - **Most remaining errors are retrieval misses.** In 4 of the 5 wrong single-topic answers, the right page wasn't retrieved, so the model correctly declined.
 - With 50–60 questions, one question moves a score by about 2 points, so differences under about 4 points are noise.
+
+## Hindi questions
+
+A question written mostly in a non-English script (for example Hindi) is first translated into an English search query by the LLM, searched against the English index, and then answered in the language it was asked in. If the documents don't cover it, the reply says so in Hindi. English questions skip the translation step.
+
+Measured on a 16-question Hindi test set ([`eval/golden_hi.jsonl`](eval/golden_hi.jsonl), translations of English test questions with the same evidence pages):
+
+| Approach | Hindi recall@5 | English recall@5 |
+|---|---|---|
+| English index, Hindi question as typed | 0.00 | 0.88 |
+| Multilingual index (multilingual-e5-small) | 0.21 | 0.87 |
+| Multilingual index (multilingual MiniLM) | 0.29 | 0.56 |
+| **English index, question translated first (default)** | **0.86** | **0.88** |
+
+Small multilingual embedding models couldn't match Hindi farming words (लौकी, सुपारी) to the English text; translating the question first nearly closes the gap with English. A spot check of three Hindi questions end to end (a crop fact, a scheme rule, and an off-topic question) gave correct Hindi answers citing the right pages, and a correct Hindi refusal. The full Hindi answer evaluation has not been run yet.
 
 ## The test set
 
@@ -159,7 +175,7 @@ Step-by-step guide (server, domain, `.env`, loading documents, updates, troubles
 
 ## Limitations and next steps
 
-- **English only.** The embedding model is English, and mostly non-English text is skipped at ingestion. The PM-KISAN PDF is half Hindi, and its Hindi text also extracts as garbled characters. A multilingual model (for example `bge-m3`) and a Hindi test slice are the most useful next step.
+- **Hindi questions, English documents.** Hindi questions work through translation (above), but only English document text is indexed: the PM-KISAN PDF is half Hindi, and its Hindi text extracts as garbled characters. Hindi answers are only spot-checked so far, and other Indian languages are untested.
 - **Small corpus.** Six documents, two of them mirrors of official guidelines because the government sites weren't reachable during development. More sources can be added as rows in [`data/sources.csv`](data/sources.csv).
 - **Two-topic questions.** One search rarely retrieves both topics; splitting a question into two searches would help.
 - **Tables.** Dosage tables in the PDFs extract as loose text, and some answers misread them.

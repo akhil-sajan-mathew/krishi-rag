@@ -58,3 +58,8 @@ def test_no_chunks_means_not_found_without_calling_llm(monkeypatch):
     monkeypatch.setattr(generate, "retrieve", lambda q, mode: [])
     monkeypatch.setattr(generate, "complete", lambda *a: pytest.fail("LLM should not be called"))
     assert generate.answer("anything")["found"] is False
+
+
+def test_hindi_question_gets_hindi_not_found_message(monkeypatch, fake_retrieval):
+    monkeypatch.setattr(generate, "complete", lambda system, user: "NOT_FOUND")
+    assert generate.answer("गेहूं का समर्थन मूल्य क्या है?")["answer"] == generate.NOT_FOUND_ANSWER_HI
