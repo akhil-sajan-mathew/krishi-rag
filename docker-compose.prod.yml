@@ -1,0 +1,42 @@
+# Production: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# Needs in .env: DOMAIN, POSTGRES_PASSWORD, LLM_* settings. See docs/deploy.md.
+services:
+  db:
+    ports: !reset []  # not reachable from outside the server
+    restart: unless-stopped
+
+  redis:
+    ports: !reset []
+    restart: unless-stopped
+
+  api:
+    build: .
+    image: krishi-rag:local
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://krishi:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/krishi
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    # No ports: only Caddy can reach the API (see the Dockerfile note on --proxy-headers).
+
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env (use localhost for a local test)}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  caddy_data:  # HTTPS certificates; keep it so Let's Encrypt isn't asked again on every restart

@@ -3,7 +3,8 @@ services:
     image: pgvector/pgvector:pg16
     environment:
       POSTGRES_USER: krishi
-      POSTGRES_PASSWORD: krishi  # local dev only; production uses .env
+      # Only applied when the volume is first created; changing it later does not change the DB.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-krishi}
       POSTGRES_DB: krishi
     ports:
       - "5433:5432"  # 5433 so it doesn't clash with a locally installed Postgres

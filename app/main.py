@@ -1,7 +1,9 @@
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from app import cache, generate
@@ -20,6 +22,7 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Krishi RAG", lifespan=lifespan)
+INDEX_HTML = Path(__file__).parent / "static" / "index.html"
 
 
 class AskRequest(BaseModel):
@@ -75,3 +78,8 @@ def health() -> dict:
         raise HTTPException(status_code=503, detail=f"db: {e}") from e
     # Redis is optional (cache and rate limit fail open), so it never makes the API unhealthy.
     return {"db": "ok", "redis": "ok" if cache.ping() else "down"}
+
+
+@app.get("/", include_in_schema=False)
+def index() -> FileResponse:
+    return FileResponse(INDEX_HTML)

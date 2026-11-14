@@ -48,3 +48,9 @@ def test_unknown_provider_gives_clear_error(monkeypatch):
     monkeypatch.setattr(llm.settings, "llm_provider", "nope")
     with pytest.raises(llm.LLMError, match="LLM_PROVIDER must be one of"):
         llm.complete("s", "u")
+
+
+def test_index_page_is_served():
+    r = client.get("/")
+    assert r.status_code == 200 and "text/html" in r.headers["content-type"]
+    assert 'id="question"' in r.text

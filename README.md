@@ -4,7 +4,7 @@
 
 A question-answering service for Indian farmers, built on official crop and government-scheme documents. It uses retrieval-augmented generation (RAG): it finds the relevant passages first, then writes an answer that cites the source document and page for every claim. It's built with FastAPI, PostgreSQL with pgvector, Redis and any LLM provider (Claude, OpenAI, Gemini, Groq, OpenRouter, Ollama and other OpenAI-compatible APIs), and it comes with a published evaluation.
 
-**Status:** in progress (Day 5: caching, rate limiting, CI). See [PLAN.md](PLAN.md) for the full build plan.
+**Status:** in progress (Day 6: production setup ready; not yet deployed). See [PLAN.md](PLAN.md) for the full build plan.
 
 ## Run locally
 
@@ -19,7 +19,7 @@ uv run python -m app.ingest --config size512_overlap64
 uv run uvicorn app.main:app --port 8000
 ```
 
-Then ask a question:
+Open http://localhost:8000 for the web page, or ask from the command line:
 
 ```bash
 curl -X POST localhost:8000/ask -H "content-type: application/json" -d '{"question": "What is the seed rate for bottle gourd?"}'
@@ -41,6 +41,16 @@ Any provider works. Set these in `.env`:
 | Ollama (local, free) | `openai_compatible` | `http://localhost:11434/v1` |
 
 Also set `LLM_MODEL` (the provider's model name) and `LLM_API_KEY` (any text for Ollama).
+
+## Deploying
+
+The production setup is a Docker image (CPU-only PyTorch, models baked in, runs as a non-root user) plus Caddy for automatic HTTPS. Only Caddy is reachable from outside; the API, Postgres and Redis are not. It runs on any Linux server with 2 GB of RAM:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```
+
+Step-by-step guide (server, domain, `.env`, loading documents, updates): [docs/deploy.md](docs/deploy.md).
 
 ## Caching and rate limits
 
