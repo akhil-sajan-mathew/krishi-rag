@@ -15,7 +15,7 @@ Ask a farming question in plain language and get a short answer drawn only from 
 ## How it works
 
 ```mermaid
-flowchart LR
+flowchart TD
     Q[Question] --> C{Redis cache}
     C -- hit --> A[Answer + citations]
     C -- miss --> V[Vector search<br/>pgvector, top 20]
