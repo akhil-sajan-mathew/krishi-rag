@@ -15,7 +15,9 @@ class LLMError(RuntimeError):
 
 def _cfg(role: str) -> tuple[str, str, str, str]:
     p = "judge" if role == "judge" else "llm"
-    return tuple(getattr(settings, f"{p}_{f}") for f in ("provider", "model", "base_url", "api_key"))
+    return tuple(
+        getattr(settings, f"{p}_{f}") for f in ("provider", "model", "base_url", "api_key")
+    )
 
 
 @cache

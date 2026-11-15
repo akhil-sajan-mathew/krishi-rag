@@ -66,6 +66,7 @@ All numbers come from [`eval/run_eval.py`](eval/run_eval.py) on [`eval/golden.js
 - **Keyword search needs less weight.** On conversational questions it's weak on its own, and at equal weight it pulled hybrid search below vector search alone. At half weight it stops hurting.
 - **Smaller chunks lost.** 256-token chunks scored lower than 512-token chunks, even when given the same total amount of text.
 - **Answering part of a question beats declining it.** The first prompt declined 5 of 10 two-part questions outright when the sources covered only one half. After the change, none were declined and their average score rose from 40% to 55%; the trade-off is that a few partial answers wrongly say the other half isn't in the documents.
+- **Splitting two-topic questions helped most.** A question that asks about two different things (cocoa compost and cocoa bean moisture; orange mites and powdery mildew) now gets one search per topic, and the results are merged ([`app/decompose.py`](app/decompose.py)). Two-part questions went from 55% average score (30% fully correct) to 80% (60% fully correct), with factual and scheme questions unchanged (86% average over 40 questions, against 87% and 90% before). The table above is the run before this change. The 10 off-topic questions were re-run only partly: 8 were declined correctly and the other 2 hit the free tier's daily token limit, so they weren't scored. With 10 two-part questions, treat the gain as "clearly better", not as a precise number.
 - **Most remaining errors are retrieval misses.** In 4 of the 5 wrong single-topic answers, the right page wasn't retrieved, so the model correctly declined.
 - With 50–60 questions, one question moves a score by about 2 points, so differences under about 4 points are noise.
 
@@ -187,9 +188,9 @@ Step-by-step guide (server, domain, `.env`, loading documents, updates, troubles
 
 ## Limitations and next steps
 
-- **Hindi questions, English documents.** Hindi questions work through translation (above), but only English document text is indexed: the PM-KISAN PDF is half Hindi, and its Hindi text extracts as garbled characters. Hindi answers score a bit below English (above), and other Indian languages are untested.
+- **Hindi questions, English documents.** Hindi questions work through translation (above), but only English document text is indexed: the PM-KISAN PDF is half Hindi, and its Hindi text extracts as garbled characters (an old font encoding, so fixing it would need OCR, and the embedding models tested here match Hindi text poorly anyway, so Hindi sources would also need a better multilingual model). Hindi answers score a bit below English (above), and other Indian languages are untested.
 - **Small corpus.** Six documents, two of them mirrors of official guidelines because the government sites weren't reachable during development. More sources can be added as rows in [`data/sources.csv`](data/sources.csv).
-- **Two-topic questions.** One search rarely retrieves both topics; splitting a question into two searches would help.
+- **Two-topic questions.** Splitting helps (above), but only questions containing "and", a comma or a semicolon are checked, and at most two topics are searched.
 - **Tables.** Dosage tables in the PDFs extract as loose text, and some answers misread them.
 - **Small test set.** 60 questions are enough to catch large effects, not small ones.
 - **Not deployed yet.** The production setup has been tested locally end to end, including HTTPS through Caddy, but not on a public server.
@@ -208,3 +209,7 @@ scripts/    PDF download
 docs/       deploy guide, screenshot
 PLAN.md     the original build plan
 ```
+
+## License
+
+[MIT](LICENSE)

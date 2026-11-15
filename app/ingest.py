@@ -96,7 +96,14 @@ def store(conn, row: dict, page_count: int, chunks: list[Chunk], vectors, config
                ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, publisher = EXCLUDED.publisher,
                  url = EXCLUDED.url, category = EXCLUDED.category,
                  page_count = EXCLUDED.page_count, ingested_at = now()""",
-            (row["doc_id"], row["title"], row["publisher"], row["url"], row["category"], page_count),
+            (
+                row["doc_id"],
+                row["title"],
+                row["publisher"],
+                row["url"],
+                row["category"],
+                page_count,
+            ),
         )
         # Idempotent re-runs: replace this document's chunks for this config only.
         conn.execute(
@@ -118,7 +125,9 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default="size512_overlap64", choices=CHUNK_CONFIGS)
     ap.add_argument("--only", help="ingest a single doc_id")
-    ap.add_argument("--dry-run", action="store_true", help="parse and chunk only; no embedding, no DB")
+    ap.add_argument(
+        "--dry-run", action="store_true", help="parse and chunk only; no embedding, no DB"
+    )
     args = ap.parse_args()
     size, overlap, model = CHUNK_CONFIGS[args.config]
 
@@ -137,7 +146,9 @@ def main() -> None:
         raw_pages = read_pages(pdf)
         avg_chars = sum(map(len, raw_pages)) / max(len(raw_pages), 1)
         if avg_chars < MIN_CHARS_PER_PAGE:
-            print(f"skip    {row['doc_id']}: {avg_chars:.0f} chars/page, likely scanned (no text layer)")
+            print(
+                f"skip    {row['doc_id']}: {avg_chars:.0f} chars/page, likely scanned (no text layer)"
+            )
             continue
         chunks = chunk_pages(clean_pages(raw_pages), size, overlap)
         if not chunks:
@@ -150,7 +161,14 @@ def main() -> None:
         )
         total += len(chunks)
         if conn is not None:
-            store(conn, row, len(raw_pages), chunks, embed_passages([c.text for c in chunks], model, progress=True), args.config)
+            store(
+                conn,
+                row,
+                len(raw_pages),
+                chunks,
+                embed_passages([c.text for c in chunks], model, progress=True),
+                args.config,
+            )
 
     print(f"total chunks: {total}" + (" (dry run, nothing stored)" if args.dry_run else ""))
     if conn is not None:

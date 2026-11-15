@@ -11,7 +11,10 @@ CHUNKS = [
 def test_valid_citations_kept_and_mapped_in_order():
     text, cites = generate.parse_citations("Use 3 kg [2]. Sow in May [1, 2].", CHUNKS)
     assert text == "Use 3 kg [2]. Sow in May [1, 2]."
-    assert [(c["n"], c["document_id"], c["page"]) for c in cites] == [(2, "pmfby", 12), (1, "kau", 198)]
+    assert [(c["n"], c["document_id"], c["page"]) for c in cites] == [
+        (2, "pmfby", 12),
+        (1, "kau", 198),
+    ]
 
 
 def test_invalid_citation_numbers_are_dropped():
@@ -26,7 +29,9 @@ def test_fullwidth_brackets_are_accepted():
 
 
 def test_dagger_locators_are_stripped():
-    text, cites = generate.parse_citations("Within 48 hours[2†21.4.6.1] and 7 days【1†L5-L9】.", CHUNKS)
+    text, cites = generate.parse_citations(
+        "Within 48 hours[2†21.4.6.1] and 7 days【1†L5-L9】.", CHUNKS
+    )
     assert text == "Within 48 hours[2] and 7 days[1]." and [c["n"] for c in cites] == [2, 1]
 
 
@@ -45,7 +50,12 @@ def fake_retrieval(monkeypatch):
 def test_not_found_reply(monkeypatch, fake_retrieval, reply):
     monkeypatch.setattr(generate, "complete", lambda system, user: reply)
     result = generate.answer("Price of gold?")
-    assert result == {"answer": generate.NOT_FOUND_ANSWER, "found": False, "citations": [], "uncited": False}
+    assert result == {
+        "answer": generate.NOT_FOUND_ANSWER,
+        "found": False,
+        "citations": [],
+        "uncited": False,
+    }
 
 
 def test_answer_without_citations_is_flagged(monkeypatch, fake_retrieval):

@@ -53,8 +53,7 @@ def test_rate_limit_zero_disables_it(monkeypatch):
     counting_answer(monkeypatch)
     monkeypatch.setattr(cache.settings, "rate_limit_per_hour", 0)
     assert all(
-        client.post("/ask", json={"question": f"Q number {i}"}).status_code == 200
-        for i in range(5)
+        client.post("/ask", json={"question": f"Q number {i}"}).status_code == 200 for i in range(5)
     )
 
 

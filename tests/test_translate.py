@@ -4,7 +4,10 @@ from app.llm import LLMError
 
 def test_english_questions_are_not_translated(monkeypatch):
     monkeypatch.setattr(translate, "complete", lambda *a: (_ for _ in ()).throw(AssertionError))
-    assert translate.search_query.__wrapped__("Seed rate for bottle gourd?") == "Seed rate for bottle gourd?"
+    assert (
+        translate.search_query.__wrapped__("Seed rate for bottle gourd?")
+        == "Seed rate for bottle gourd?"
+    )
 
 
 def test_hindi_question_is_translated(monkeypatch):

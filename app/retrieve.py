@@ -5,6 +5,7 @@ from typing import Literal
 
 from app.config import embed_model_for, settings
 from app.db import connect
+from app.decompose import sub_queries
 from app.embed import embed_query
 from app.translate import search_query
 
@@ -71,7 +72,7 @@ def rerank(question: str, hits: list[dict], top_n: int) -> list[dict]:
     return [h for h, _ in ranked[:top_n]]
 
 
-def retrieve(
+def _retrieve_one(
     question: str, mode: Mode = "hybrid_rerank", top_n: int = 5, config: str | None = None
 ) -> list[dict]:
     config = config or settings.chunk_config
@@ -92,3 +93,20 @@ def retrieve(
     if mode == "hybrid":
         return fused[:top_n]
     return rerank(question, fused[: settings.rerank_pool], top_n)
+
+
+def retrieve(
+    question: str, mode: Mode = "hybrid_rerank", top_n: int = 5, config: str | None = None
+) -> list[dict]:
+    """Search once, or once per topic when the question asks about two different things."""
+    queries = sub_queries(search_query(question))
+    if len(queries) == 1:
+        return _retrieve_one(question, mode, top_n, config)
+    per_query = -(-(top_n + 1) // len(queries))  # ceil: one extra chunk in total for the split case
+    lists = [_retrieve_one(q, mode, per_query, config) for q in queries]
+    merged: dict[int, dict] = {}
+    for rank in range(per_query):  # interleave so each topic gets its best chunks first
+        for chunks in lists:
+            if rank < len(chunks):
+                merged.setdefault(chunks[rank]["id"], chunks[rank])
+    return list(merged.values())

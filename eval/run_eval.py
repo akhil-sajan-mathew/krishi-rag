@@ -163,10 +163,16 @@ def main() -> None:
     ap.add_argument("--mode", default="hybrid_rerank", choices=MODES)
     ap.add_argument("--config", default=settings.chunk_config)
     ap.add_argument("--limit", type=int)
-    ap.add_argument("--golden", type=Path, default=GOLDEN, help="test set file (e.g. eval/golden_hi.jsonl)")
-    ap.add_argument("--types", nargs="+", choices=["factual", "scheme", "multi_hop", "unanswerable"])
+    ap.add_argument(
+        "--golden", type=Path, default=GOLDEN, help="test set file (e.g. eval/golden_hi.jsonl)"
+    )
+    ap.add_argument(
+        "--types", nargs="+", choices=["factual", "scheme", "multi_hop", "unanswerable"]
+    )
     ap.add_argument("--retrieval-only", action="store_true", help="score retrieval only, no LLM")
-    ap.add_argument("--modes", nargs="+", default=list(MODES), choices=MODES, help="with --retrieval-only")
+    ap.add_argument(
+        "--modes", nargs="+", default=list(MODES), choices=MODES, help="with --retrieval-only"
+    )
     args = ap.parse_args()
     items = load_golden(args.limit, args.types, args.golden)
     partial = bool(args.limit or args.types)
@@ -202,7 +208,9 @@ def main() -> None:
     if args.retrieval_only:
         for mode in args.modes:
             s = score_retrieval(items, mode, args.config)
-            path = write_results(f"{prefix}retrieval_{mode}_{args.config}", s, {**meta, "mode": mode})
+            path = write_results(
+                f"{prefix}retrieval_{mode}_{args.config}", s, {**meta, "mode": mode}
+            )
             print(
                 f"{mode:14s} recall@5 {_fmt(s['recall@5'])}  recall@10 {_fmt(s['recall@10'])}  "
                 f"MRR@10 {_fmt(s['mrr@10'])}  by type {s['by_type']}  -> {path.name}"
