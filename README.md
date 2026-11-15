@@ -82,7 +82,19 @@ Measured on a 16-question Hindi test set ([`eval/golden_hi.jsonl`](eval/golden_h
 | Multilingual index (multilingual MiniLM) | 0.29 | 0.56 |
 | **English index, question translated first (default)** | **0.86** | **0.88** |
 
-Small multilingual embedding models couldn't match Hindi farming words (लौकी, सुपारी) to the English text; translating the question first nearly closes the gap with English. A spot check of three Hindi questions end to end (a crop fact, a scheme rule, and an off-topic question) gave correct Hindi answers citing the right pages, and a correct Hindi refusal. The full Hindi answer evaluation has not been run yet.
+Small multilingual embedding models couldn't match Hindi farming words (लौकी, सुपारी) to the English text; translating the question first nearly closes the gap with English. A spot check of three Hindi questions end to end (a crop fact, a scheme rule, and an off-topic question) gave correct Hindi answers citing the right pages, and a correct Hindi refusal. 
+
+Full Hindi answer run (14 answerable questions + 2 off-topic, same LLM and judge as the English run):
+
+| Measure | Hindi | English (60 questions) |
+|---|---|---|
+| Fully correct | 71% | 76% |
+| Faithful to sources | 86% | 92% |
+| Citation accuracy | 64% | 84% |
+| Wrongly declined | 14% (2 of 14) | 8% |
+| Off-topic declined | 2 of 2 | 9 of 10 |
+
+Four answers were wrong: two were wrongly declined, one gave a neem-oil spray where the reference says dimethoate, and one said income-tax status doesn't affect PM-KISAN eligibility, which it does. With 14 questions a single answer moves a score by about 7 points, so read this as "somewhat below English", not as a precise gap.
 
 ## The test set
 
@@ -175,7 +187,7 @@ Step-by-step guide (server, domain, `.env`, loading documents, updates, troubles
 
 ## Limitations and next steps
 
-- **Hindi questions, English documents.** Hindi questions work through translation (above), but only English document text is indexed: the PM-KISAN PDF is half Hindi, and its Hindi text extracts as garbled characters. Hindi answers are only spot-checked so far, and other Indian languages are untested.
+- **Hindi questions, English documents.** Hindi questions work through translation (above), but only English document text is indexed: the PM-KISAN PDF is half Hindi, and its Hindi text extracts as garbled characters. Hindi answers score a bit below English (above), and other Indian languages are untested.
 - **Small corpus.** Six documents, two of them mirrors of official guidelines because the government sites weren't reachable during development. More sources can be added as rows in [`data/sources.csv`](data/sources.csv).
 - **Two-topic questions.** One search rarely retrieves both topics; splitting a question into two searches would help.
 - **Tables.** Dosage tables in the PDFs extract as loose text, and some answers misread them.

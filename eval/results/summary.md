@@ -53,3 +53,4 @@ Notes:
 | 2026-11-14 19:52 | retrieval only: golden_hi, hybrid_rerank, size512_overlap64, kw weight 0.5, pool 15, reranker ms-marco-MiniLM-L6-v2 | 0.86 | 0.93 | 0.63 | | | | | | 1110 ms |
 - 14 Nov, Hindi: `golden_hi` = 16 Hindi questions (14 answerable) translated from the English set, same evidence pages. `golden` in a label = the English set. `_e5` and `_minilm` = indexes built with multilingual embedding models (intfloat/multilingual-e5-small, paraphrase-multilingual-MiniLM-L12-v2).
 - Hindi rows before 19:52 searched with the Hindi question as typed. From 19:52, non-English questions are translated to English by the LLM (gpt-oss-120b) before searching; English questions are unaffected.
+| 2026-11-15 14:26 | full: golden_hi, hybrid_rerank, size512_overlap64, kw weight 0.5, pool 15, reranker ms-marco-MiniLM-L6-v2, LLM openai/gpt-oss-120b, judge openai/gpt-oss-20b | 0.79 | | | 0.71 | 0.86 | 0.64 | 1.00 | 0.14 | 21416 ms |
