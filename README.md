@@ -193,7 +193,7 @@ Step-by-step guide (server, domain, `.env`, loading documents, updates, troubles
 - **Two-topic questions.** Splitting helps (above), but only questions containing "and", a comma or a semicolon are checked, and at most two topics are searched.
 - **Tables.** Dosage tables in the PDFs extract as loose text, and some answers misread them.
 - **Small test set.** 60 questions are enough to catch large effects, not small ones.
-- **Not deployed yet.** The production setup has been tested locally end to end, including HTTPS through Caddy, but not on a public server.
+- **Deployed and tested.** The production setup was tested end to end on a deployment, including HTTPS through Caddy. It is not live at the moment; the guide is in [docs/deploy.md](docs/deploy.md).
 
 ## Data sources
 
